@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cake Kamea — аудит макета под Shopify</title>
+<style>
+  :root {
+    /* palette derived from the Figma design tokens */
+    --paper: #f7f5ec;
+    --card: #ffffff;
+    --card-2: #f1eee0;
+    --ink: #1e0a12;
+    --ink-soft: #4a3640;
+    --muted: #7a6a72;
+    --line: #e3ddcf;
+    --line-strong: #d3cbb8;
+    --purple: #874c64;
+    --purple-deep: #6d3b50;
+    --pink: #f4bfc5;
+    --pink-soft: #ffe4e4;
+    --beige-btn: #eae7d3;
+
+    --ok: #4f7d55;
+    --ok-bg: #e6efe4;
+    --warn: #b07a1e;
+    --warn-bg: #f6ecd6;
+    --crit: #b23350;
+    --crit-bg: #f8e0e3;
+
+    --font-sans: "Jost", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+    --font-mono: "SF Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
+
+    --shadow: 0 1px 2px rgba(30,10,18,.05), 0 6px 24px rgba(30,10,18,.06);
+    --radius: 14px;
+    --maxw: 900px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #17090f;
+      --card: #211018;
+      --card-2: #2a1620;
+      --ink: #f3e9ed;
+      --ink-soft: #d8c6cf;
+      --muted: #a98fa0;
+      --line: #38222d;
+      --line-strong: #4a2e3b;
+      --purple: #d78fa9;
+      --purple-deep: #c57995;
+      --pink: #e9a9b3;
+      --pink-soft: #3a2028;
+      --beige-btn: #33303f;
+      --ok: #7fb184; --ok-bg: #1d2c1f;
+      --warn: #d8a94e; --warn-bg: #2e2413;
+      --crit: #e58399; --crit-bg: #341620;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #f7f5ec; --card: #ffffff; --card-2: #f1eee0;
+    --ink: #1e0a12; --ink-soft: #4a3640; --muted: #7a6a72;
+    --line: #e3ddcf; --line-strong: #d3cbb8;
+    --purple: #874c64; --purple-deep: #6d3b50; --pink: #f4bfc5; --pink-soft: #ffe4e4; --beige-btn: #eae7d3;
+    --ok:#4f7d55; --ok-bg:#e6efe4; --warn:#b07a1e; --warn-bg:#f6ecd6; --crit:#b23350; --crit-bg:#f8e0e3;
+    --shadow: 0 1px 2px rgba(30,10,18,.05), 0 6px 24px rgba(30,10,18,.06);
+  }
+  :root[data-theme="dark"] {
+    --paper: #17090f; --card: #211018; --card-2: #2a1620;
+    --ink: #f3e9ed; --ink-soft: #d8c6cf; --muted: #a98fa0;
+    --line: #38222d; --line-strong: #4a2e3b;
+    --purple: #d78fa9; --purple-deep: #c57995; --pink: #e9a9b3; --pink-soft: #3a2028; --beige-btn: #33303f;
+    --ok:#7fb184; --ok-bg:#1d2c1f; --warn:#d8a94e; --warn-bg:#2e2413; --crit:#e58399; --crit-bg:#341620;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 30px rgba(0,0,0,.35);
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  img { max-width: 100%; height: auto; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px 96px; }
+
+  /* ---------- theme toggle ---------- */
+  .theme-toggle {
+    position: fixed; top: 14px; right: 14px; z-index: 50;
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--card); color: var(--ink-soft);
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    padding: 7px 13px; font: inherit; font-size: 13px; cursor: pointer;
+    box-shadow: var(--shadow);
+  }
+  .theme-toggle:hover { border-color: var(--purple); color: var(--purple-deep); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+
+  /* ---------- header ---------- */
+  header.masthead {
+    background:
+      radial-gradient(120% 140% at 100% 0%, rgba(244,191,197,.35), transparent 55%),
+      linear-gradient(180deg, var(--card-2), var(--paper));
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead .wrap { padding-top: 46px; padding-bottom: 34px; }
+  .eyebrow {
+    font-size: 12px; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--purple); font-weight: 600; margin: 0 0 14px;
+  }
+  h1 {
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.08; margin: 0 0 8px;
+    font-weight: 600; letter-spacing: -.02em; text-wrap: balance;
+  }
+  .subtitle { font-size: 18px; color: var(--ink-soft); margin: 0 0 24px; max-width: 60ch; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--card); border: 1px solid var(--line-strong);
+    padding: 6px 12px; border-radius: 999px; font-size: 13px; color: var(--ink-soft);
+  }
+  .chip b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- generic sections ---------- */
+  section { margin-top: 52px; }
+  h2 {
+    font-size: 13px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--purple); font-weight: 700; margin: 0 0 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  h2::after { content:""; flex:1; height:1px; background: var(--line); }
+  h3 { font-size: 21px; margin: 0 0 6px; font-weight: 600; letter-spacing: -.01em; }
+  p { margin: 0 0 12px; }
+  a { color: var(--purple-deep); }
+
+  /* ---------- verdict banner ---------- */
+  .verdict {
+    background: linear-gradient(180deg, var(--card), var(--card-2));
+    border: 1px solid var(--line-strong); border-radius: var(--radius);
+    padding: 24px 26px; box-shadow: var(--shadow);
+    border-left: 5px solid var(--purple);
+  }
+  .verdict p:last-child { margin-bottom: 0; }
+  .verdict strong { color: var(--purple-deep); }
+
+  /* ---------- stat tiles ---------- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 18px; }
+  .stat {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    padding: 16px 16px; box-shadow: var(--shadow);
+  }
+  .stat .n { font-size: 30px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .stat .l { font-size: 12.5px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+  .stat.crit .n { color: var(--crit); }
+  .stat.warn .n { color: var(--warn); }
+
+  /* ---------- legend ---------- */
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12.5px; font-weight: 600; padding: 4px 11px; border-radius: 999px;
+    border: 1px solid transparent; white-space: nowrap;
+  }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .pill.ok   { background: var(--ok-bg); color: var(--ok); border-color: color-mix(in srgb, var(--ok) 30%, transparent); }
+  .pill.ok .dot { background: var(--ok); }
+  .pill.warn { background: var(--warn-bg); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 30%, transparent); }
+  .pill.warn .dot { background: var(--warn); }
+  .pill.crit { background: var(--crit-bg); color: var(--crit); border-color: color-mix(in srgb, var(--crit) 35%, transparent); }
+  .pill.crit .dot { background: var(--crit); }
+
+  /* ---------- audit cards ---------- */
+  .cards { display: flex; flex-direction: column; gap: 16px; }
+  .acard {
+    background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); overflow: hidden;
+  }
+  .acard-head {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    padding: 18px 22px 14px;
+  }
+  .acard-head .t { min-width: 0; }
+  .acard-head .kicker { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+  .acard-body { padding: 0 22px 20px; }
+  .acard-body p { color: var(--ink-soft); }
+  .acard hr { border: none; border-top: 1px dashed var(--line-strong); margin: 14px 0; }
+  .rows { display: grid; gap: 9px; }
+  .row { display: grid; grid-template-columns: 120px 1fr; gap: 14px; font-size: 14.5px; align-items: start; }
+  .row .k { color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; padding-top: 1px; }
+  .row .v { color: var(--ink-soft); }
+  .row .v b { color: var(--ink); font-weight: 600; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag { font-size: 12px; background: var(--card-2); border: 1px solid var(--line); color: var(--ink-soft); padding: 2px 9px; border-radius: 6px; }
+  ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--ink-soft); }
+  ul.tight li { margin-bottom: 5px; }
+  ul.tight li::marker { color: var(--purple); }
+
+  /* ---------- tables ---------- */
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); background: var(--card); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 620px; }
+  th, td { text-align: left; padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--card-2); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  tbody tr:last-child td { border-bottom: none; }
+  td .num { font-variant-numeric: tabular-nums; font-family: var(--font-mono); white-space: nowrap; }
+  .sev { font-weight: 700; font-size: 12.5px; }
+  .sev.h { color: var(--crit); }
+  .sev.m { color: var(--warn); }
+  .sev.l { color: var(--ok); }
+  tfoot td { font-weight: 600; background: var(--card-2); }
+
+  /* ---------- checklist ---------- */
+  .check { display: grid; gap: 10px; }
+  .check .item {
+    display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start;
+    background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 13px 15px;
+  }
+  .check .box { width: 18px; height: 18px; margin-top: 2px; border: 2px solid var(--purple); border-radius: 5px; }
+  .check .item b { font-weight: 600; }
+  .check .item span { color: var(--ink-soft); }
+
+  .q { border-left: 3px solid var(--pink); padding: 4px 0 4px 16px; margin: 0 0 14px; }
+  .q b { display: block; margin-bottom: 2px; }
+  .q span { color: var(--muted); font-size: 14px; }
+
+  footer.foot { margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+  /* swatches for design-system section */
+  .sw { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+  .swatch { display: flex; flex-direction: column; gap: 6px; align-items: center; font-size: 11px; color: var(--muted); }
+  .swatch i { width: 46px; height: 46px; border-radius: 10px; border: 1px solid var(--line-strong); display: block; }
+  .swatch code { font-family: var(--font-mono); font-size: 10.5px; }
+
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .row { grid-template-columns: 1fr; gap: 2px; }
+    .row .k { padding-top: 6px; }
+    .acard-head { flex-direction: column; }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .acard { transition: border-color .2s ease; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему">🌗 Тема</button>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="eyebrow">Аудит макета перед версткой</p>
+    <h1>Cake&nbsp;Kamea — оценка проекта под&nbsp;Shopify</h1>
+    <p class="subtitle">Разбор Figma-макета кондитерской по разделам: готовность дизайн-системы, совместимость с платформой, риски и оценка объёма кастомной темы.</p>
+    <div class="chips">
+      <span class="chip">🗺️ Рынок: <b>Таиланд (Паттайя / Чонбури)</b></span>
+      <span class="chip">💱 Валюта: <b>THB + RUB (через менеджера)</b></span>
+      <span class="chip">🧩 Платформа: <b>Shopify — кастомная тема (Liquid)</b></span>
+      <span class="chip">🎨 Аудитория: <b>рус.-язычная + тайцы</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- EXECUTIVE SUMMARY -->
+  <section id="summary" style="margin-top:40px;">
+    <h2>Резюме</h2>
+    <div class="verdict">
+      <p><strong>Дизайн зрелый, база под кастомную тему хорошая.</strong> В файле есть переменные-токены (цвета + типографика на шрифте Jost) и отдельная секция Ui&nbsp;Kit с компонентами для desktop и mobile. Это заметно снижает риск и стоимость верстки — система ближе к «почти полной», чем к «частичной».</p>
+      <p><strong>Но это не типовой каталожный магазин.</strong> Проект держится на 4–5 нестандартных для Shopify механиках: интерактивный <em>конструктор торта</em> с наценками по опциям, выбор <em>даты и времени доставки прямо в корзине</em> с валидацией срока изготовления, интеграция курьерской службы <em>Lalamove</em>, платежи под Таиланд (тайский QR / PromptPay + перевод в рублях через менеджера), и <em>начинки</em> как отдельная контент-сущность. Именно эти узлы, а не верстка страниц, определяют бюджет и сроки.</p>
+      <p><strong>Вывод:</strong> верстку можно начинать после того, как по 4 «красным» узлам примут архитектурные решения (нативно / приложение / кастом-разработка) — иначе есть риск переверстывать корзину и карточку под выбранный механизм.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="n">~13</div><div class="l">экранов desktop</div></div>
+      <div class="stat"><div class="n">~10</div><div class="l">экранов mobile (паритет есть)</div></div>
+      <div class="stat warn"><div class="n">10</div><div class="l">уникальных секций на главной</div></div>
+      <div class="stat crit"><div class="n">4</div><div class="l">узла кастом-разработки</div></div>
+    </div>
+  </section>
+
+  <!-- LEGEND -->
+  <section id="legend">
+    <h2>Легенда готовности</h2>
+    <div class="legend">
+      <span class="pill ok"><span class="dot"></span>Ложится на тему — стандартная верстка</span>
+      <span class="pill warn"><span class="dot"></span>Нужно решение — метафилды / приложение / настройка</span>
+      <span class="pill crit"><span class="dot"></span>Кастом-разработка — драйвер бюджета и сроков</span>
+    </div>
+  </section>
+
+  <!-- DESIGN SYSTEM -->
+  <section id="ds">
+    <h2>Дизайн-система</h2>
+    <div class="acard">
+      <div class="acard-head">
+        <div class="t">
+          <div class="kicker">Фундамент</div>
+          <h3>Токены, шрифт и Ui Kit</h3>
+        </div>
+        <span class="pill ok"><span class="dot"></span>Хорошая база</span>
+      </div>
+      <div class="acard-body">
+        <p>Цвета и типографика оформлены как переменные Figma. Единый шрифт <b>Jost</b>, выстроенная шкала заголовков. Есть выделенная секция Ui&nbsp;Kit с компонентами (поиск, карточки товара, кнопки, теги, формы, дропдауны, степперы количества, футер с картой) в desktop- и mobile-исполнении.</p>
+        <div class="sw">
+          <span class="swatch"><i style="background:#874c64"></i><code>#874c64</code>Purple</span>
+          <span class="swatch"><i style="background:#1e0a12"></i><code>#1e0a12</code>Black</span>
+          <span class="swatch"><i style="background:#f6f5eb"></i><code>#f6f5eb</code>Beige</span>
+          <span class="swatch"><i style="background:#eae7d3"></i><code>#eae7d3</code>Beige btn</span>
+          <span class="swatch"><i style="background:#ffe4e4"></i><code>#ffe4e4</code>Pink</span>
+          <span class="swatch"><i style="background:#f4bfc5"></i><code>#f4bfc5</code>Pink Dark</span>
+        </div>
+        <hr>
+        <div class="rows">
+          <div class="row"><div class="k">Типографика</div><div class="v">Jost — H1 44 / H2 38 / H3 34 / H4 18 / Body 16 / Button 16–14 / Label 14. Заданы line-height и letter-spacing.</div></div>
+          <div class="row"><div class="k">Проверить</div><div class="v"><b>Единая сетка и брейкпоинты</b> (в токенах их не видно), spacing-шкала, радиусы и тени как токены, <b>состояния компонентов</b> (hover / focus / active / disabled / error), покрытие всех экранов компонентами (там где «частично» — свести к общим).</div></div>
+          <div class="row"><div class="k">Рекомендация</div><div class="v">До верстки финализировать токены (spacing / radius / shadow), собрать брейкпоинты и состояния. Тёмная тема не нужна — сайт светлый по концепции.</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTIONS -->
+  <section id="sections">
+    <h2>Разбор по разделам</h2>
+    <div class="cards">
+
+      <!-- Главная -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 01</div><h3>Главная</h3></div>
+          <span class="pill ok"><span class="dot"></span>Ложится на тему</span>
+        </div>
+        <div class="acard-body">
+          <p>≈10 секций: hero с CTA, «Популярные торты», промо-баннеры, «Коллекция начинок», вход в конструктор «Создай свой торт», «Десерты», отзывы клиентов, скидка 10%, футер с картой.</p>
+          <div class="rows">
+            <div class="row"><div class="k">На Shopify</div><div class="v">Каждая секция — настраиваемая Liquid-секция в редакторе темы. Стандартно.</div></div>
+            <div class="row"><div class="k">Риски</div><div class="v">Тяжёлые изображения (нужна оптимизация / lazy-load), карусель отзывов, привязка блоков «Популярное» к коллекциям.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Каталог -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 02</div><h3>Каталог + Каталог кусков</h3></div>
+          <span class="pill ok"><span class="dot"></span>Ложится на тему</span>
+        </div>
+        <div class="acard-body">
+          <p>Сетка карточек 4-в-ряд, чипсы-фильтры (Все торты, Пирожные, Муссовые, Мини-торты, Десерты, Торты с декором, Начинки). Отдельный вид «Куски тортов».</p>
+          <div class="rows">
+            <div class="row"><div class="k">На Shopify</div><div class="v">Нативные коллекции + storefront-фильтрация (теги / метафилды). «Куски» — отдельная коллекция или тип товара.</div></div>
+            <div class="row"><div class="k">Риски</div><div class="v">Логика фильтров (пересечение категорий), быстрое «+ в корзину» с карточки для товаров с обязательным выбором веса.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Карточка товара -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 03</div><h3>Карточка товара (Cake card)</h3></div>
+          <span class="pill warn"><span class="dot"></span>Нужно решение</span>
+        </div>
+        <div class="acard-body">
+          <p>Галерея, аллерген-теги, селектор веса (0.5 / 1 / 1.5 кг с числом персон), кнопка «В корзину» с ценой, «Добавить декор +» (переход в конструктор), состав, аккордеон «Хранение и срок годности», блок кросс-селла «Добавить к заказу».</p>
+          <div class="rows">
+            <div class="row"><div class="k">На Shopify</div><div class="v"><b>Вес</b> → варианты товара. <b>Состав / аллергены / персоны / срок</b> → метафилды. <b>«Добавить к заказу»</b> (упаковка, начинка, свечи, табличка с ценами) → приложение доп.опций или кастом-логика добавления отдельных line items.</div></div>
+            <div class="row"><div class="k">Риски</div><div class="v">Кросс-селл-add-on'ы добавляют цену — нативные варианты это не решают. Бейдж «В корзине» и связка с конструктором.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Конструктор -->
+      <div class="acard" style="border-color: color-mix(in srgb, var(--crit) 40%, var(--line));">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 04 · ключевой риск</div><h3>Конструктор торта (Cake builder)</h3></div>
+          <span class="pill crit"><span class="dot"></span>Кастом-разработка</span>
+        </div>
+        <div class="acard-body">
+          <p>Интерактивный конфигуратор с живой ценой. Набор опций выходит далеко за пределы нативной модели вариантов Shopify (макс. 3 опции):</p>
+          <div class="tags" style="margin:2px 0 12px;">
+            <span class="tag">вес (вариант)</span>
+            <span class="tag">ягодный декор</span>
+            <span class="tag">надпись + шрифт + цвет</span>
+            <span class="tag">табличка с текстом</span>
+            <span class="tag">цветы / декор</span>
+            <span class="tag">упаковка +цена</span>
+            <span class="tag">свечи +цена, кол-во</span>
+            <span class="tag">топпер +цена</span>
+            <span class="tag">живой пересчёт цены</span>
+          </div>
+          <div class="rows">
+            <div class="row"><div class="k">Варианты решения</div><div class="v">
+              <ul class="tight" style="margin-top:0;">
+                <li><b>Приложение доп.опций</b> с ценовыми add-on (Globo / Infinite Options и add-on-товары) — быстрее, но абонплата и ограничения UI.</li>
+                <li><b>Кастомный билдер</b> на Storefront API + <b>Shopify Functions</b> для расчёта цены — максимум контроля под этот дизайн, дороже в разработке.</li>
+                <li><b>Bundle-приложение</b> — если сборка ближе к «набору», а не к калькулятору.</li>
+              </ul>
+            </div></div>
+            <div class="row"><div class="k">Персонализация</div><div class="v">Текст на торте / табличке → line item properties (переносятся в заказ и видны в корзине).</div></div>
+            <div class="row"><div class="k">Главный вывод</div><div class="v"><b>Это основной драйвер бюджета и сроков.</b> Решение по механизму принять до верстки карточки и корзины — они от него зависят.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Начинки -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 05</div><h3>Начинки (Fillings)</h3></div>
+          <span class="pill warn"><span class="dot"></span>Нужно решение</span>
+        </div>
+        <div class="acard-body">
+          <p>Контент-каталог из ~15+ карточек: фото среза, название, описание, состав, аллергены. Начинки при этом ещё и выбираются в конструкторе и кросс-селле — значит это общая переиспользуемая сущность.</p>
+          <div class="rows">
+            <div class="row"><div class="k">На Shopify</div><div class="v"><b>Метаобъекты (metaobjects)</b> с полями фото / описание / состав / аллергены; на них ссылаются страница «Начинки», конструктор и карточка. Единый источник данных.</div></div>
+            <div class="row"><div class="k">Риски</div><div class="v">Если начинки завести просто страницей — их придётся дублировать в конструкторе. Метаобъекты решают, но требуют настройки на старте.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Корзина -->
+      <div class="acard" style="border-color: color-mix(in srgb, var(--crit) 40%, var(--line));">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 06 · ключевой риск</div><h3>Корзина (Cart drawer)</h3></div>
+          <span class="pill crit"><span class="dot"></span>Кастом-разработка</span>
+        </div>
+        <div class="acard-body">
+          <p>Выезжающий drawer. Строки с персонализацией («Текст: С днём рождения, Вика!»), бандлы («Сет пирожных» с выбранным составом), бейдж срока изготовления «От 2х дней», <b>выбор даты и времени доставки/самовывоза прямо в корзине</b> с валидацией, кнопка «Перейти к оформлению».</p>
+          <div class="rows">
+            <div class="row"><div class="k">На Shopify</div><div class="v">Дата/время в корзине → cart attributes + кастомный JS, либо приложение (Zapiet — Pickup&nbsp;+&nbsp;Delivery). <b>Валидация lead-time</b> («товар не позволяет доставку на сегодня») → метафилд срока у товара + логика в корзине. Бандлы → bundle-приложение или составные товары.</div></div>
+            <div class="row"><div class="k">Риски</div><div class="v">Дата доставки должна дойти до заказа и до Lalamove. Валидация «минимальный срок по самому долгому товару в корзине» — кастомная бизнес-логика, тестировать отдельно.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Доставка и оплата -->
+      <div class="acard" style="border-color: color-mix(in srgb, var(--crit) 40%, var(--line));">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 07 · ключевой риск</div><h3>Доставка и оплата</h3></div>
+          <span class="pill crit"><span class="dot"></span>Кастом-разработка / конфигурация</span>
+        </div>
+        <div class="acard-body">
+          <p>Самовывоз из кондитерской + <b>доставка курьером Lalamove</b> (ввод адреса, дата/время, расчёт стоимости, оплата). Оплата: «Картой на сайте», тайский QR (PromptPay), «Оплата через менеджера» — перевод в рублях. Инструкция по QR-оплате (аккордеон).</p>
+          <div class="rows">
+            <div class="row"><div class="k">Платежи</div><div class="v"><b>Shopify Payments в Таиланде недоступен.</b> Карты/THB → сторонний шлюз (2C2P / Opn&nbsp;(Omise) / GB&nbsp;Prime&nbsp;Pay), PromptPay — через них. «Через менеджера в рублях» → ручной (offline) способ оплаты или draft-заказ. Нужны реквизиты и договоры со шлюзом.</div></div>
+            <div class="row"><div class="k">Доставка</div><div class="v"><b>Lalamove</b> → приложение из App Store или интеграция через carrier service API с live-расчётом. Самовывоз → local pickup. Дата/время должны прокидываться из корзины.</div></div>
+            <div class="row"><div class="k">Риски</div><div class="v">Мультивалютность THB/RUB (Shopify Markets показывает валюты, но расчёт в RUB через Shopify Payments в TH невозможен — отсюда «менеджер»). Комиссии шлюзов, KYC, сроки подключения — организационный, а не только технический риск.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Личный кабинет -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 08</div><h3>Личный кабинет (Account)</h3></div>
+          <span class="pill warn"><span class="dot"></span>Нужно решение</span>
+        </div>
+        <div class="acard-body">
+          <p>Профиль (имя, email, телефон, адрес доставки — редактировать / новый адрес / удалить), история заказов со статусами («Собираем заказ», «Доставлен») и превью товаров.</p>
+          <div class="rows">
+            <div class="row"><div class="k">На Shopify</div><div class="v">Customer accounts. Несколько адресов — нативно. <b>Кастомные статусы заказа</b> («Собираем заказ») → order tags / метафилды + отображение. New customer accounts кастомизируются ограниченно (UI extensions); полный контроль дизайна — только classic (постепенно устаревают).</div></div>
+            <div class="row"><div class="k">Риски</div><div class="v">Точное повторение дизайна кабинета может упереться в ограничения платформы — согласовать допустимые упрощения заранее.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Контент -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 09</div><h3>О нас · FAQ · Попапы</h3></div>
+          <span class="pill ok"><span class="dot"></span>Ложится на тему</span>
+        </div>
+        <div class="acard-body">
+          <p>Контентные страницы: «О нас» (текст + фото команды), FAQ (аккордеон вопрос-ответ), набор попапов (Popup / Desktop).</p>
+          <div class="rows">
+            <div class="row"><div class="k">На Shopify</div><div class="v">Страницы + секции / метаобъекты для FAQ. Попапы — компонент темы. Стандартно.</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- RISK REGISTER -->
+  <section id="risks">
+    <h2>Риск-регистр</h2>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Риск</th><th>Раздел</th><th>Влияние</th><th>Митигация</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Конструктор выходит за рамки нативных вариантов и наценок</td>
+            <td>Конструктор</td>
+            <td><span class="sev h">Высокое</span></td>
+            <td>Выбрать механизм (app доп.опций vs кастом + Functions) до верстки; прототип цены на 1 товаре</td>
+          </tr>
+          <tr>
+            <td>Платёжные шлюзы Таиланда: подключение, KYC, комиссии, RUB через менеджера</td>
+            <td>Оплата</td>
+            <td><span class="sev h">Высокое</span></td>
+            <td>Начать подключение 2C2P / Opn заранее (организационные сроки); RUB — offline-способ</td>
+          </tr>
+          <tr>
+            <td>Дата/время доставки в корзине + валидация срока изготовления</td>
+            <td>Корзина</td>
+            <td><span class="sev h">Высокое</span></td>
+            <td>Zapiet или кастом на cart attributes; метафилд lead-time у товара; отдельный QA</td>
+          </tr>
+          <tr>
+            <td>Интеграция Lalamove с live-расчётом и прокидыванием даты</td>
+            <td>Доставка</td>
+            <td><span class="sev m">Среднее</span></td>
+            <td>Проверить наличие/качество приложения Lalamove; запасной план — carrier service API</td>
+          </tr>
+          <tr>
+            <td>Начинки дублируются между страницей, конструктором и кросс-селлом</td>
+            <td>Начинки</td>
+            <td><span class="sev m">Среднее</span></td>
+            <td>Единый источник — metaobjects, спроектировать схему на старте</td>
+          </tr>
+          <tr>
+            <td>Кастомный дизайн кабинета vs ограничения customer accounts</td>
+            <td>Кабинет</td>
+            <td><span class="sev m">Среднее</span></td>
+            <td>Согласовать упрощения; статусы через order tags</td>
+          </tr>
+          <tr>
+            <td>Кросс-селл add-on'ы с ценой на карточке</td>
+            <td>Карточка</td>
+            <td><span class="sev m">Среднее</span></td>
+            <td>Тот же механизм, что и конструктор, чтобы не плодить решения</td>
+          </tr>
+          <tr>
+            <td>«Частичность» дизайн-системы: нет явной сетки/брейкпоинтов/состояний</td>
+            <td>Дизайн-система</td>
+            <td><span class="sev l">Низкое</span></td>
+            <td>Финализировать токены и состояния до верстки</td>
+          </tr>
+          <tr>
+            <td>Тяжёлые изображения тортов — скорость и Core Web Vitals</td>
+            <td>Главная / Каталог</td>
+            <td><span class="sev l">Низкое</span></td>
+            <td>Оптимизация, srcset, lazy-load, CDN Shopify</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- EFFORT -->
+  <section id="effort">
+    <h2>Предварительная оценка объёма</h2>
+    <p style="color:var(--ink-soft); margin-top:-6px;">Ориентир в человеко-днях для кастомной темы. Диапазон зависит от выбранных механизмов (приложение vs собственная разработка) и объёма контента. Не заменяет ТЗ — это рамка для планирования.</p>
+    <div class="tablewrap">
+      <table>
+        <thead>
+          <tr><th>Блок работ</th><th>Чел-дни</th><th>Комментарий</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Каркас темы, токены → код, дизайн-система</td><td class="num">3–5</td><td>Сетка, брейкпоинты, spacing/radius/shadow, шрифт Jost</td></tr>
+          <tr><td>Глобальные компоненты (header, footer, cart drawer база, попапы)</td><td class="num">4–6</td><td>Переиспользуемая основа</td></tr>
+          <tr><td>Главная (10 настраиваемых секций)</td><td class="num">5–8</td><td>Секции в редакторе темы</td></tr>
+          <tr><td>Каталог + фильтры + карточки товара в сетке</td><td class="num">3–5</td><td>Коллекции, storefront-фильтры</td></tr>
+          <tr><td>Карточка товара (галерея, вес-варианты, метафилды, кросс-селл)</td><td class="num">4–6</td><td>Зависит от механизма add-on</td></tr>
+          <tr><td>⚑ Конструктор торта</td><td class="num">12–20</td><td>Главный узел; app+кастом vs полностью кастом</td></tr>
+          <tr><td>Начинки (metaobjects + шаблон + связи)</td><td class="num">3–5</td><td>Схема данных</td></tr>
+          <tr><td>⚑ Корзина (drawer, дата/время, lead-time, бандлы)</td><td class="num">6–10</td><td>Кастом-логика + QA</td></tr>
+          <tr><td>⚑ Доставка + платежи (Lalamove, шлюзы, QR, manual RUB)</td><td class="num">6–10</td><td>+ организационные сроки подключений</td></tr>
+          <tr><td>Личный кабинет (customer accounts, статусы)</td><td class="num">3–6</td><td>В рамках возможностей платформы</td></tr>
+          <tr><td>Контент-страницы (О нас, FAQ, Доставка)</td><td class="num">2–4</td><td>Стандартно</td></tr>
+          <tr><td>QA, адаптив, оптимизация изображений, запуск</td><td class="num">5–8</td><td>Сквозное тестирование сценариев</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>Итого (ориентир)</td><td class="num">≈ 56–93</td><td>+ ежемесячная абонплата приложений</td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <p style="color:var(--muted); font-size:13px; margin-top:10px;">⚑ — узлы, определяющие итоговый бюджет. Выбор «приложение vs кастом» по ним сдвигает оценку сильнее всего.</p>
+  </section>
+
+  <!-- PRE-DEV CHECKLIST -->
+  <section id="checklist">
+    <h2>Что решить/поправить в макете до верстки</h2>
+    <div class="check">
+      <div class="item"><div class="box"></div><div><b>Механизм конструктора и карточки.</b> <span>Приложение доп.опций или кастом + Shopify Functions. Единое решение для наценок в конструкторе и в «Добавить к заказу».</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Механизм даты доставки и lead-time.</b> <span>Zapiet vs кастом. Определить правило минимального срока (по самому долгому товару?) и как дата попадает в заказ и в Lalamove.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Платёжные шлюзы.</b> <span>Начать подключение тайского шлюза (2C2P / Opn) и оформить offline-способ для RUB-переводов — это организационные сроки, стартовать заранее.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Модель данных начинок.</b> <span>Metaobjects со схемой полей; единый источник для страницы, конструктора и кросс-селла.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Токены и состояния.</b> <span>Добавить в макет spacing-шкалу, брейкпоинты, радиусы/тени и состояния компонентов (hover/focus/disabled/error).</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Дизайн кабинета.</b> <span>Согласовать допустимые упрощения под ограничения Shopify customer accounts.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Мобильный конструктор.</b> <span>Проверить мобильную версию Cake builder на полноту (в файле есть, но нужно свериться, что покрыты все шаги).</span></div></div>
+    </div>
+  </section>
+
+  <!-- OPEN QUESTIONS -->
+  <section id="questions">
+    <h2>Открытые вопросы к заказчику</h2>
+    <div class="q"><b>Ассортимент и варианты.</b> <span>Сколько SKU, у всех ли товаров выбор веса, какие товары «под заказ» и с каким сроком изготовления?</span></div>
+    <div class="q"><b>Оплата.</b> <span>Какой тайский шлюз уже используется/предпочтителен? Нужен ли онлайн-приём рублей или достаточно ручного перевода через менеджера?</span></div>
+    <div class="q"><b>Доставка.</b> <span>Lalamove — единственная служба? Зоны и тарифы самовывоза/доставки? Нужен ли живой расчёт стоимости на сайте?</span></div>
+    <div class="q"><b>Языки и валюты.</b> <span>Нужен ли полноценный второй язык (тайский/английский) и переключение валют, или интерфейс остаётся русским?</span></div>
+    <div class="q"><b>Приложения.</b> <span>Есть ли ограничение по бюджету на ежемесячные подписки приложений (влияет на выбор app vs кастом)?</span></div>
+  </section>
+
+  <footer class="foot">
+    <p>Аудит подготовлен на основе Figma-файла «Cake Kamea (Copy)» — секции Site и Ui Kit, экраны desktop и mobile. Оценки предварительные и подлежат уточнению после согласования ТЗ и архитектурных решений по «красным» узлам.</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    function current() {
+      var attr = root.getAttribute('data-theme');
+      if (attr) return attr;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    btn.addEventListener('click', function () {
+      var next = current() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+    });
+  })();
+</script>
+
+</body>
+</html>
