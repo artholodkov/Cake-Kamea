@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cake Kamea — коммерческое предложение (интернет-магазин на Shopify)</title>
+<style>
+  :root {
+    --paper: #f7f5ec;
+    --card: #ffffff;
+    --card-2: #f1eee0;
+    --ink: #1e0a12;
+    --ink-soft: #4a3640;
+    --muted: #7a6a72;
+    --line: #e3ddcf;
+    --line-strong: #d3cbb8;
+    --purple: #874c64;
+    --purple-deep: #6d3b50;
+    --pink: #f4bfc5;
+    --pink-soft: #ffe4e4;
+    --beige-btn: #eae7d3;
+    --ok: #4f7d55; --ok-bg: #e6efe4;
+    --warn: #b07a1e; --warn-bg: #f6ecd6;
+    --font-sans: "Jost", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+    --font-mono: "SF Mono", "Cascadia Code", Consolas, ui-monospace, monospace;
+    --shadow: 0 1px 2px rgba(30,10,18,.05), 0 6px 24px rgba(30,10,18,.06);
+    --radius: 14px;
+    --maxw: 940px;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #17090f; --card: #211018; --card-2: #2a1620;
+      --ink: #f3e9ed; --ink-soft: #d8c6cf; --muted: #a98fa0;
+      --line: #38222d; --line-strong: #4a2e3b;
+      --purple: #d78fa9; --purple-deep: #c57995; --pink: #e9a9b3; --pink-soft: #3a2028; --beige-btn: #33303f;
+      --ok:#7fb184; --ok-bg:#1d2c1f; --warn:#d8a94e; --warn-bg:#2e2413;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 30px rgba(0,0,0,.35);
+    }
+  }
+  :root[data-theme="light"] {
+    --paper: #f7f5ec; --card: #ffffff; --card-2: #f1eee0;
+    --ink: #1e0a12; --ink-soft: #4a3640; --muted: #7a6a72;
+    --line: #e3ddcf; --line-strong: #d3cbb8;
+    --purple: #874c64; --purple-deep: #6d3b50; --pink: #f4bfc5; --pink-soft: #ffe4e4; --beige-btn: #eae7d3;
+    --ok:#4f7d55; --ok-bg:#e6efe4; --warn:#b07a1e; --warn-bg:#f6ecd6;
+    --shadow: 0 1px 2px rgba(30,10,18,.05), 0 6px 24px rgba(30,10,18,.06);
+  }
+  :root[data-theme="dark"] {
+    --paper: #17090f; --card: #211018; --card-2: #2a1620;
+    --ink: #f3e9ed; --ink-soft: #d8c6cf; --muted: #a98fa0;
+    --line: #38222d; --line-strong: #4a2e3b;
+    --purple: #d78fa9; --purple-deep: #c57995; --pink: #e9a9b3; --pink-soft: #3a2028; --beige-btn: #33303f;
+    --ok:#7fb184; --ok-bg:#1d2c1f; --warn:#d8a94e; --warn-bg:#2e2413;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 30px rgba(0,0,0,.35);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-sans); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  .wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 22px 96px; }
+
+  .theme-toggle {
+    position: fixed; top: 14px; right: 14px; z-index: 50;
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--card); color: var(--ink-soft); border: 1px solid var(--line-strong);
+    border-radius: 999px; padding: 7px 13px; font: inherit; font-size: 13px; cursor: pointer; box-shadow: var(--shadow);
+  }
+  .theme-toggle:hover { border-color: var(--purple); color: var(--purple-deep); }
+  .theme-toggle:focus-visible { outline: 2px solid var(--purple); outline-offset: 2px; }
+
+  header.masthead {
+    background: radial-gradient(120% 140% at 100% 0%, rgba(244,191,197,.35), transparent 55%), linear-gradient(180deg, var(--card-2), var(--paper));
+    border-bottom: 1px solid var(--line);
+  }
+  .masthead .wrap { padding-top: 46px; padding-bottom: 34px; }
+  .brandline { font-size: 13px; letter-spacing: .28em; text-transform: uppercase; color: var(--purple); font-weight: 700; margin: 0 0 16px; }
+  .eyebrow { font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); font-weight: 600; margin: 0 0 10px; }
+  h1 { font-size: clamp(28px, 4.6vw, 42px); line-height: 1.1; margin: 0 0 10px; font-weight: 600; letter-spacing: -.02em; text-wrap: balance; }
+  .subtitle { font-size: 17px; color: var(--ink-soft); margin: 0 0 22px; max-width: 64ch; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { display: inline-flex; align-items: center; gap: 7px; background: var(--card); border: 1px solid var(--line-strong); padding: 6px 12px; border-radius: 999px; font-size: 13px; color: var(--ink-soft); }
+  .chip b { color: var(--ink); font-weight: 600; }
+
+  section { margin-top: 50px; }
+  h2 { font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: var(--purple); font-weight: 700; margin: 0 0 18px; display: flex; align-items: center; gap: 12px; }
+  h2::after { content:""; flex:1; height:1px; background: var(--line); }
+  h3 { font-size: 20px; margin: 0 0 6px; font-weight: 600; letter-spacing: -.01em; }
+  p { margin: 0 0 12px; color: var(--ink-soft); }
+  strong { color: var(--ink); }
+
+  .lead { background: linear-gradient(180deg, var(--card), var(--card-2)); border: 1px solid var(--line-strong); border-left: 5px solid var(--purple); border-radius: var(--radius); padding: 22px 24px; box-shadow: var(--shadow); }
+  .lead p:last-child { margin-bottom: 0; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .valuecard { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; box-shadow: var(--shadow); }
+  .valuecard .ic { font-size: 20px; }
+  .valuecard h3 { font-size: 16px; margin: 8px 0 4px; }
+  .valuecard p { font-size: 14px; margin: 0; }
+
+  .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); background: var(--card); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 640px; }
+  th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  thead th { background: var(--card-2); font-size: 12px; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--font-mono); white-space: nowrap; }
+  .subhead td { background: var(--card-2); font-weight: 700; color: var(--purple-deep); font-size: 12.5px; letter-spacing: .04em; text-transform: uppercase; }
+  tfoot td { font-weight: 700; background: var(--card-2); }
+  .muted-cell { color: var(--muted); font-size: 13px; }
+
+  .pack { background: var(--card); border: 2px solid var(--purple); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 8px; }
+  .pack .ribbon { background: var(--purple); color: #fff; text-align: center; font-size: 11.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; padding: 6px; }
+  .pack .body { padding: 22px 24px; }
+  .pack .toprow { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px; }
+  .pack .name { font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
+  .pack .price { font-size: 32px; font-weight: 700; letter-spacing: -.02em; font-variant-numeric: tabular-nums; color: var(--purple-deep); }
+  .pack .price small { font-size: 16px; font-weight: 600; color: var(--muted); }
+  .pack .facts { display: flex; gap: 16px; margin: 8px 0 4px; font-size: 13px; color: var(--muted); }
+  .pack .facts b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .callout { border-radius: 12px; padding: 15px 18px; margin: 14px 0; border: 1px solid; font-size: 14px; }
+  .callout.note { background: var(--card-2); border-color: var(--line-strong); color: var(--ink-soft); }
+  .callout.okbox { background: var(--ok-bg); border-color: color-mix(in srgb, var(--ok) 30%, transparent); color: var(--ink-soft); }
+  .callout b { color: var(--ink); }
+
+  .rows { display: grid; gap: 10px; }
+  .row { display: grid; grid-template-columns: 190px 1fr; gap: 16px; font-size: 14.5px; align-items: start; }
+  .row .k { color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: .05em; padding-top: 2px; }
+  .row .v { color: var(--ink-soft); }
+  .row .v b { color: var(--ink); }
+
+  ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--ink-soft); }
+  ul.tight li { margin-bottom: 6px; }
+  ul.tight li::marker { color: var(--purple); }
+
+  ul.feat { list-style: none; margin: 14px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px 20px; font-size: 14px; color: var(--ink-soft); }
+  ul.feat li { display: grid; grid-template-columns: 18px 1fr; gap: 8px; align-items: start; }
+  ul.feat li .m { color: var(--ok); font-weight: 700; }
+
+  .stages { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .stage { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 15px 16px; box-shadow: var(--shadow); }
+  .stage .pct { font-size: 24px; font-weight: 700; color: var(--purple-deep); font-variant-numeric: tabular-nums; }
+  .stage .st { font-size: 13px; color: var(--ink-soft); margin-top: 2px; }
+
+  .cta { background: linear-gradient(135deg, var(--purple), var(--purple-deep)); color: #fff; border-radius: var(--radius); padding: 26px 28px; box-shadow: var(--shadow); }
+  .cta h3 { color: #fff; font-size: 22px; }
+  .cta p { color: rgba(255,255,255,.9); }
+  .cta .contact { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+  .cta .contact span { background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.25); border-radius: 999px; padding: 7px 14px; font-size: 14px; }
+
+  footer.foot { margin-top: 56px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+
+  @media (max-width: 760px) {
+    .grid2 { grid-template-columns: 1fr; }
+    ul.feat { grid-template-columns: 1fr; }
+    .stages { grid-template-columns: 1fr; }
+    .row { grid-template-columns: 1fr; gap: 2px; }
+    .row .k { padding-top: 8px; }
+  }
+  @media print {
+    .theme-toggle { display: none; }
+    body { background: #fff; color: #000; }
+    .pack, .valuecard, .tablewrap, .stage, .lead { box-shadow: none; }
+    section { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" type="button" aria-label="Переключить тему">🌗 Тема</button>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="brandline">Kamea Cake</p>
+    <p class="eyebrow">Коммерческое предложение · Разработка интернет-магазина</p>
+    <h1>Интернет-магазин кондитерской на Shopify</h1>
+    <p class="subtitle">Сайт, который снимает с кондитера приём заказов: клиент сам выбирает товар, указывает корректный адрес и оплачивает — а заказ в готовом виде приходит вам. Стартуем с рабочего магазина, конструктор и остальное — следующим этапом.</p>
+    <div class="meta">
+      <span class="chip">📅 Дата: <b>26.07.2026</b></span>
+      <span class="chip">💱 Валюта: <b>RUB</b></span>
+      <span class="chip">⚙️ Ставка: <b>1500 ₽/час</b></span>
+      <span class="chip">⏳ Действует: <b>30 дней</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- Задача -->
+  <section id="about" style="margin-top:40px;">
+    <h2>Задача</h2>
+    <div class="lead">
+      <p><strong>Главная цель — разгрузить кондитера.</strong> Сейчас он не только готовит, но и принимает заказы, помогает клиентам с адресом и оформлением доставки. Много ручной работы и ошибок: клиент часто не может корректно указать адрес, приходится всё уточнять вручную.</p>
+      <p><strong>Сайт берёт это на себя:</strong> клиент сам выбирает торты и десерты, оформляет заказ, <strong>указывает корректный адрес</strong> (включая название кондо) и оплачивает. Заказ со всеми деталями автоматически приходит менеджеру — кондитеру остаётся готовить.</p>
+    </div>
+  </section>
+
+  <!-- Что получаете -->
+  <section id="why">
+    <h2>Что вы получаете</h2>
+    <div class="grid2">
+      <div class="valuecard">
+        <div class="ic">🧾</div>
+        <h3>Заказы приходят сами</h3>
+        <p>Личный кабинет, корзина, оформление — заказ с адресом и составом падает менеджеру в готовом виде.</p>
+      </div>
+      <div class="valuecard">
+        <div class="ic">📍</div>
+        <h3>Корректный адрес</h3>
+        <p>Форма с обязательными полями (кондо, ориентиры) — меньше уточнений и ошибок доставки.</p>
+      </div>
+      <div class="valuecard">
+        <div class="ic">💳</div>
+        <h3>Онлайн-оплата</h3>
+        <p>Приём карт (иностранных и тайских) через тайский шлюз + оплата через менеджера по QR.</p>
+      </div>
+      <div class="valuecard">
+        <div class="ic">💸</div>
+        <h3>Без лишних подписок</h3>
+        <p>Обычный тариф Shopify, дорогой Plus не нужен, обязательных платных приложений — ноль.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Пакет MVP -->
+  <section id="mvp">
+    <h2>Пакет «Запуск» — первый этап</h2>
+    <div class="pack">
+      <div class="ribbon">Рекомендуемый старт</div>
+      <div class="body">
+        <div class="toprow">
+          <div class="name">Рабочий магазин</div>
+          <div class="price">109 500&nbsp;<small>₽</small></div>
+        </div>
+        <div class="facts"><span>⏱ <b>73</b> часа</span><span>📅 <b>2–3</b> недели</span><span>🛍 до <b>~35</b> товаров</span></div>
+        <ul class="feat">
+          <li><span class="m">✓</span> Кастомная тема по вашему дизайну</li>
+          <li><span class="m">✓</span> Главная, каталог, карточка товара</li>
+          <li><span class="m">✓</span> Корзина и оформление заказа</li>
+          <li><span class="m">✓</span> Корректный сбор адреса + заказ менеджеру</li>
+          <li><span class="m">✓</span> Онлайн-оплата + оплата через менеджера</li>
+          <li><span class="m">✓</span> Личный кабинет, скидка 10% новым</li>
+          <li><span class="m">✓</span> Страницы: О нас, FAQ, Доставка</li>
+          <li><span class="m">✓</span> Адаптив, тестирование, запуск</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tablewrap" style="margin-top:16px;">
+      <table>
+        <thead><tr><th>Модуль</th><th>Что входит</th><th class="num">Часы</th><th class="num">Стоимость</th></tr></thead>
+        <tbody>
+          <tr><td>Настройка Shopify и каркас темы</td><td class="muted-cell">Магазин, дизайн-токены, шрифты, сетка</td><td class="num">7</td><td class="num">10 500 ₽</td></tr>
+          <tr><td>Шапка, футер, меню, корзина</td><td class="muted-cell">Общие элементы всех страниц</td><td class="num">9</td><td class="num">13 500 ₽</td></tr>
+          <tr><td>Главная страница</td><td class="muted-cell">Ключевые секции, баннеры, блоки</td><td class="num">9</td><td class="num">13 500 ₽</td></tr>
+          <tr><td>Каталог и фильтры</td><td class="muted-cell">Категории, фильтры, карточки в сетке</td><td class="num">7</td><td class="num">10 500 ₽</td></tr>
+          <tr><td>Карточка товара</td><td class="muted-cell">Галерея, вес, состав, аллергены, персоны</td><td class="num">10</td><td class="num">15 000 ₽</td></tr>
+          <tr><td>Оформление заказа + адрес</td><td class="muted-cell">Форма адреса (кондо), заказ уходит менеджеру</td><td class="num">6</td><td class="num">9 000 ₽</td></tr>
+          <tr><td>Онлайн-оплата</td><td class="muted-cell">Тайский шлюз + оплата через менеджера (QR)</td><td class="num">5</td><td class="num">7 500 ₽</td></tr>
+          <tr><td>Личный кабинет</td><td class="muted-cell">Регистрация/гость, история, скидка 10%</td><td class="num">7</td><td class="num">10 500 ₽</td></tr>
+          <tr><td>Контентные страницы</td><td class="muted-cell">О нас, FAQ, Доставка и оплата</td><td class="num">5</td><td class="num">7 500 ₽</td></tr>
+          <tr><td>Тестирование и запуск</td><td class="muted-cell">Адаптив, оптимизация, проверка, публикация</td><td class="num">8</td><td class="num">12 000 ₽</td></tr>
+        </tbody>
+        <tfoot><tr><td>Итого — пакет «Запуск»</td><td></td><td class="num">73</td><td class="num">109 500 ₽</td></tr></tfoot>
+      </table>
+    </div>
+    <p style="color:var(--muted); font-size:13px; margin-top:10px;">Оценка предварительная, возможна корректировка ±15% после финального ТЗ. Подключение платёжного шлюза на стороне банка (проверка документов) в часы не входит и зависит от сроков банка.</p>
+  </section>
+
+  <!-- Фаза 2 -->
+  <section id="phase2">
+    <h2>Фаза 2 — развитие (по желанию)</h2>
+    <p style="margin-top:-6px;">Модули, которые можно добавить сразу или позже, отдельными этапами. Каждый — с понятной стоимостью, ставка та же 1500 ₽/час.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Модуль</th><th>Что даёт</th><th class="num">Часы</th><th class="num">Стоимость</th></tr></thead>
+        <tbody>
+          <tr><td>Конструктор торта</td><td class="muted-cell">Сборка торта: вес, декор, надпись, упаковка, свечи, топпер с расчётом цены</td><td class="num">28</td><td class="num">42 000 ₽</td></tr>
+          <tr><td>Логика «наличие / срок / доставка»</td><td class="muted-cell">Товары под заказ, сроки изготовления, уведомления, дата доставки</td><td class="num">14</td><td class="num">21 000 ₽</td></tr>
+          <tr><td>Второй язык (RU / EN)</td><td class="muted-cell">Мультиязычный интерфейс для туристов</td><td class="num">5</td><td class="num">7 500 ₽</td></tr>
+          <tr><td>Бот приёма заказов (Telegram / WhatsApp)</td><td class="muted-cell">Заказы и уведомления в мессенджер менеджеру</td><td class="num">8</td><td class="num">12 000 ₽</td></tr>
+          <tr><td>Аналитика и пиксели</td><td class="muted-cell">Google / Meta / TikTok для рекламы</td><td class="num">5</td><td class="num">7 500 ₽</td></tr>
+          <tr><td>Виджет WhatsApp / чат</td><td class="muted-cell">Быстрая связь с клиентом на сайте</td><td class="num">3</td><td class="num">4 500 ₽</td></tr>
+          <tr><td>Задел под реферальную систему</td><td class="muted-cell">База для приглашения друзей и бонусов</td><td class="num">8</td><td class="num">12 000 ₽</td></tr>
+          <tr><td>Наполнение каталога</td><td class="muted-cell">Заведение до ~35 товаров с фото и характеристиками</td><td class="num">10</td><td class="num">15 000 ₽</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout note"><b>Про бота.</b> Указан бот, который принимает заказы и шлёт уведомления менеджеру. Полноценный бот, который сам ведёт диалог с клиентом и оформляет заказ, — это отдельная разработка, оценивается по вашему сценарию.</div>
+  </section>
+
+  <!-- Ежемесячные расходы -->
+  <section id="recurring">
+    <h2>Ежемесячные расходы (оплачиваете напрямую)</h2>
+    <p style="margin-top:-6px;">Это не наши платежи, а стандартные расходы на работу магазина. От нас — <strong>ноль обязательных подписок</strong>.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Статья</th><th>Ориентир</th><th>Комментарий</th></tr></thead>
+        <tbody>
+          <tr><td>Тариф Shopify</td><td class="muted-cell">от ~$39/мес</td><td class="muted-cell">Базовый план, дешевле при годовой оплате</td></tr>
+          <tr><td>Комиссия платёжного шлюза</td><td class="muted-cell">~3–3.65% с транзакции</td><td class="muted-cell">Только с реальных продаж, без абонплаты</td></tr>
+          <tr><td>Домен</td><td class="muted-cell">~$10–15/год</td><td class="muted-cell">Разово в год</td></tr>
+          <tr><td>Доставка Lalamove</td><td class="muted-cell">по тарифам Lalamove</td><td class="muted-cell">Оформляется через ваш аккаунт Lalamove</td></tr>
+          <tr><td>Сторонние приложения</td><td class="muted-cell">0 ₽</td><td class="muted-cell">Не требуются для реализации</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Условия -->
+  <section id="terms">
+    <h2>Условия работы</h2>
+
+    <h3 style="margin-bottom:12px;">Этапы оплаты</h3>
+    <div class="stages">
+      <div class="stage"><div class="pct">50%</div><div class="st">Предоплата — старт работ</div></div>
+      <div class="stage"><div class="pct">50%</div><div class="st">Приёмка и запуск</div></div>
+    </div>
+
+    <div class="rows" style="margin-top:22px;">
+      <div class="row"><div class="k">Сроки</div><div class="v">Пакет «Запуск» — 2–3 недели. Отсчёт с момента предоплаты и передачи материалов.</div></div>
+      <div class="row"><div class="k">Что предоставляет заказчик</div><div class="v">Дизайн (готов, Figma), тексты и фото товаров, доступы (Shopify, платёжный шлюз, домен, аккаунт Lalamove, соцсети для пикселей), документы для подключения шлюза.</div></div>
+      <div class="row"><div class="k">Оплата</div><div class="v">Онлайн-карта — иностранные и тайские карты через тайский шлюз. Русские карты — через менеджера по QR (карты «МИР» тайскими банками не принимаются, это не техническое ограничение сайта).</div></div>
+      <div class="row"><div class="k">Гарантия</div><div class="v">Бесплатное исправление ошибок <b>14 дней</b> после запуска.</div></div>
+      <div class="row"><div class="k">Правки</div><div class="v">Правки в рамках согласованного дизайна и ТЗ включены. Изменения объёма — по доп. согласованию.</div></div>
+    </div>
+
+    <h3 style="margin:26px 0 8px;">Не входит в пакет «Запуск»</h3>
+    <ul class="tight">
+      <li>Конструктор торта и умная логика сроков — это Фаза 2 (см. выше).</li>
+      <li>Кастомизация самой страницы чекаута (требует тарифа Shopify Plus) — проекту не нужна.</li>
+      <li>Интеграция Lalamove по API с живым расчётом стоимости на сайте (стоимость доставки определяет Lalamove / менеджер).</li>
+      <li>Фотосъёмка, копирайтинг, реклама и продвижение, мобильное приложение.</li>
+    </ul>
+  </section>
+
+  <!-- CTA -->
+  <section id="next">
+    <div class="cta">
+      <h3>Готовы начать</h3>
+      <p>Запускаем рабочий магазин за 2–3 недели и снимаем с кондитера приём заказов. Зафиксируем финальное ТЗ, стартуем с предоплаты — по желанию созвонимся и пройдёмся по деталям.</p>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p>Коммерческое предложение по разработке интернет-магазина Kamea Cake на платформе Shopify. Цены указаны в рублях, без учёта налогов и эквайринговых комиссий платёжных систем. Предложение действительно 30 дней с даты выпуска. Оценка предварительная и уточняется после согласования финального технического задания.</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('themeToggle');
+    var root = document.documentElement;
+    function current() {
+      var attr = root.getAttribute('data-theme');
+      if (attr) return attr;
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    btn.addEventListener('click', function () {
+      root.setAttribute('data-theme', current() === 'dark' ? 'light' : 'dark');
+    });
+  })();
+</script>
+
+</body>
+</html>

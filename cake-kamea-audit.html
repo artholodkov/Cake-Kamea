@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cake Kamea — аудит макета под Shopify</title>
+<title>Cake Kamea — аудит и решение под Shopify</title>
 <style>
   :root {
     /* palette derived from the Figma design tokens */
@@ -133,8 +133,10 @@
   }
   h2::after { content:""; flex:1; height:1px; background: var(--line); }
   h3 { font-size: 21px; margin: 0 0 6px; font-weight: 600; letter-spacing: -.01em; }
+  h4 { font-size: 15px; margin: 18px 0 8px; font-weight: 700; color: var(--purple-deep); letter-spacing: .01em; }
   p { margin: 0 0 12px; }
   a { color: var(--purple-deep); }
+  code.inline { font-family: var(--font-mono); font-size: .88em; background: var(--card-2); border: 1px solid var(--line); padding: 1px 6px; border-radius: 5px; }
 
   /* ---------- verdict banner ---------- */
   .verdict {
@@ -143,8 +145,10 @@
     padding: 24px 26px; box-shadow: var(--shadow);
     border-left: 5px solid var(--purple);
   }
+  .verdict.good { border-left-color: var(--ok); }
   .verdict p:last-child { margin-bottom: 0; }
   .verdict strong { color: var(--purple-deep); }
+  .verdict .big { font-size: 20px; font-weight: 600; color: var(--ink); letter-spacing: -.01em; }
 
   /* ---------- stat tiles ---------- */
   .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-top: 18px; }
@@ -152,10 +156,11 @@
     background: var(--card); border: 1px solid var(--line); border-radius: 12px;
     padding: 16px 16px; box-shadow: var(--shadow);
   }
-  .stat .n { font-size: 30px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
-  .stat .l { font-size: 12.5px; color: var(--muted); margin-top: 2px; line-height: 1.35; }
+  .stat .n { font-size: 26px; font-weight: 600; letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .stat .l { font-size: 12.5px; color: var(--muted); margin-top: 4px; line-height: 1.35; }
   .stat.crit .n { color: var(--crit); }
   .stat.warn .n { color: var(--warn); }
+  .stat.ok .n { color: var(--ok); }
 
   /* ---------- legend ---------- */
   .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 6px; }
@@ -188,7 +193,7 @@
   .acard-body p { color: var(--ink-soft); }
   .acard hr { border: none; border-top: 1px dashed var(--line-strong); margin: 14px 0; }
   .rows { display: grid; gap: 9px; }
-  .row { display: grid; grid-template-columns: 120px 1fr; gap: 14px; font-size: 14.5px; align-items: start; }
+  .row { display: grid; grid-template-columns: 130px 1fr; gap: 14px; font-size: 14.5px; align-items: start; }
   .row .k { color: var(--muted); font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; padding-top: 1px; }
   .row .v { color: var(--ink-soft); }
   .row .v b { color: var(--ink); font-weight: 600; }
@@ -197,6 +202,22 @@
   ul.tight { margin: 6px 0 0; padding-left: 18px; color: var(--ink-soft); }
   ul.tight li { margin-bottom: 5px; }
   ul.tight li::marker { color: var(--purple); }
+
+  /* ---------- callouts ---------- */
+  .callout { border-radius: 12px; padding: 15px 18px; margin: 14px 0; border: 1px solid; font-size: 14.5px; }
+  .callout.note { background: var(--card-2); border-color: var(--line-strong); color: var(--ink-soft); }
+  .callout.warnbox { background: var(--warn-bg); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+  .callout.okbox { background: var(--ok-bg); border-color: color-mix(in srgb, var(--ok) 30%, transparent); }
+  .callout b { color: var(--ink); }
+
+  /* ---------- code block ---------- */
+  pre.code {
+    background: #1e1420; color: #efe4ea; border-radius: 10px; padding: 15px 16px;
+    overflow-x: auto; font-family: var(--font-mono); font-size: 12.5px; line-height: 1.5; margin: 12px 0;
+    border: 1px solid #3a2a34;
+  }
+  pre.code .c { color: #b98aa2; }
+  pre.code .k { color: #f4bfc5; }
 
   /* ---------- tables ---------- */
   .tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); background: var(--card); }
@@ -210,6 +231,9 @@
   .sev.m { color: var(--warn); }
   .sev.l { color: var(--ok); }
   tfoot td { font-weight: 600; background: var(--card-2); }
+  .yes { color: var(--ok); font-weight: 700; }
+  .no { color: var(--muted); }
+  .plus { color: var(--crit); font-weight: 700; }
 
   /* ---------- checklist ---------- */
   .check { display: grid; gap: 10px; }
@@ -227,7 +251,7 @@
 
   footer.foot { margin-top: 60px; padding-top: 22px; border-top: 1px solid var(--line); color: var(--muted); font-size: 13px; }
 
-  /* swatches for design-system section */
+  /* swatches */
   .sw { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
   .swatch { display: flex; flex-direction: column; gap: 6px; align-items: center; font-size: 11px; color: var(--muted); }
   .swatch i { width: 46px; height: 46px; border-radius: 10px; border: 1px solid var(--line-strong); display: block; }
@@ -250,34 +274,35 @@
 
 <header class="masthead">
   <div class="wrap">
-    <p class="eyebrow">Аудит макета перед версткой</p>
-    <h1>Cake&nbsp;Kamea — оценка проекта под&nbsp;Shopify</h1>
-    <p class="subtitle">Разбор Figma-макета кондитерской по разделам: готовность дизайн-системы, совместимость с платформой, риски и оценка объёма кастомной темы.</p>
+    <p class="eyebrow">Аудит макета и техническое решение</p>
+    <h1>Cake&nbsp;Kamea — разработка на&nbsp;Shopify</h1>
+    <p class="subtitle">Разбор Figma-макета кондитерской, вердикт по платформе, решение по конструктору торта без Shopify Plus и без платных подписок, оценка рисков и объёма.</p>
     <div class="chips">
-      <span class="chip">🗺️ Рынок: <b>Таиланд (Паттайя / Чонбури)</b></span>
-      <span class="chip">💱 Валюта: <b>THB + RUB (через менеджера)</b></span>
-      <span class="chip">🧩 Платформа: <b>Shopify — кастомная тема (Liquid)</b></span>
-      <span class="chip">🎨 Аудитория: <b>рус.-язычная + тайцы</b></span>
+      <span class="chip">🗺️ Рынок: <b>Таиланд (Паттайя)</b></span>
+      <span class="chip">💱 Валюта: <b>THB</b></span>
+      <span class="chip">🌐 Языки: <b>RU / EN</b></span>
+      <span class="chip">🧩 Платформа: <b>Shopify — обычный план, без Plus</b></span>
     </div>
   </div>
 </header>
 
 <div class="wrap">
 
-  <!-- EXECUTIVE SUMMARY -->
-  <section id="summary" style="margin-top:40px;">
-    <h2>Резюме</h2>
-    <div class="verdict">
-      <p><strong>Дизайн зрелый, база под кастомную тему хорошая.</strong> В файле есть переменные-токены (цвета + типографика на шрифте Jost) и отдельная секция Ui&nbsp;Kit с компонентами для desktop и mobile. Это заметно снижает риск и стоимость верстки — система ближе к «почти полной», чем к «частичной».</p>
-      <p><strong>Но это не типовой каталожный магазин.</strong> Проект держится на 4–5 нестандартных для Shopify механиках: интерактивный <em>конструктор торта</em> с наценками по опциям, выбор <em>даты и времени доставки прямо в корзине</em> с валидацией срока изготовления, интеграция курьерской службы <em>Lalamove</em>, платежи под Таиланд (тайский QR / PromptPay + перевод в рублях через менеджера), и <em>начинки</em> как отдельная контент-сущность. Именно эти узлы, а не верстка страниц, определяют бюджет и сроки.</p>
-      <p><strong>Вывод:</strong> верстку можно начинать после того, как по 4 «красным» узлам примут архитектурные решения (нативно / приложение / кастом-разработка) — иначе есть риск переверстывать корзину и карточку под выбранный механизм.</p>
+  <!-- PLATFORM VERDICT -->
+  <section id="verdict" style="margin-top:40px;">
+    <h2>Вердикт по платформе</h2>
+    <div class="verdict good">
+      <p class="big">Shopify подходит. Shopify&nbsp;Plus ($2300/мес) и кастомный чекаут — НЕ нужны.</p>
+      <p><strong>Развеиваем главный миф.</strong> $2300/мес — это тариф Shopify&nbsp;Plus, и он нужен <em>только</em> чтобы кастомизировать саму страницу чекаута (свои поля, свой дизайн оплаты). <strong>Конструктор торта чекаут не трогает вообще</strong> — это обычная страница ДО корзины: клиент собирает торт, жмёт «в корзину», дальше идёт стандартный шопифаевский чекаут. Значит Plus не требуется — хватит обычного плана (Basic / Shopify, ~$39–105/мес).</p>
+      <p><strong>Конструктор реализуется без единой платной подписки.</strong> Раз «одна строка в корзине не принципиальна» — допы кладутся отдельными позициями через штатный Cart AJAX API, персонализация уходит в line item properties. Ни приложения-конфигуратора, ни Shopify Functions, ни Plus. Платишь один раз за разработку — дальше 0 ₽/мес.</p>
+      <p><strong>Настоящая сложность проекта — не конструктор,</strong> а логика «наличие / срок изготовления / доставка» (смешанная корзина) и организационное подключение платёжного шлюза. Им посвящены отдельные разделы ниже.</p>
     </div>
 
     <div class="stats">
-      <div class="stat"><div class="n">~13</div><div class="l">экранов desktop</div></div>
-      <div class="stat"><div class="n">~10</div><div class="l">экранов mobile (паритет есть)</div></div>
-      <div class="stat warn"><div class="n">10</div><div class="l">уникальных секций на главной</div></div>
-      <div class="stat crit"><div class="n">4</div><div class="l">узла кастом-разработки</div></div>
+      <div class="stat ok"><div class="n">Plus не нужен</div><div class="l">достаточно обычного плана Shopify</div></div>
+      <div class="stat ok"><div class="n">0</div><div class="l">обязательных платных подписок</div></div>
+      <div class="stat"><div class="n">~30</div><div class="l">товаров (SKU) на старте</div></div>
+      <div class="stat warn"><div class="n">1</div><div class="l">главный сложный узел: наличие / сроки</div></div>
     </div>
   </section>
 
@@ -285,44 +310,134 @@
   <section id="legend">
     <h2>Легенда готовности</h2>
     <div class="legend">
-      <span class="pill ok"><span class="dot"></span>Ложится на тему — стандартная верстка</span>
-      <span class="pill warn"><span class="dot"></span>Нужно решение — метафилды / приложение / настройка</span>
-      <span class="pill crit"><span class="dot"></span>Кастом-разработка — драйвер бюджета и сроков</span>
+      <span class="pill ok"><span class="dot"></span>Core / нативно — штатная верстка и настройка</span>
+      <span class="pill warn"><span class="dot"></span>Настройка — метафилды / метаобъекты / бизнес-правило</span>
+      <span class="pill crit"><span class="dot"></span>Кастом-разработка — разово, без подписок и Plus</span>
     </div>
   </section>
 
-  <!-- DESIGN SYSTEM -->
-  <section id="ds">
-    <h2>Дизайн-система</h2>
-    <div class="acard">
+  <!-- CONSTRUCTOR SOLUTION -->
+  <section id="builder">
+    <h2>Конструктор торта — техрешение</h2>
+    <div class="acard" style="border-color: color-mix(in srgb, var(--ok) 35%, var(--line));">
       <div class="acard-head">
-        <div class="t">
-          <div class="kicker">Фундамент</div>
-          <h3>Токены, шрифт и Ui Kit</h3>
-        </div>
-        <span class="pill ok"><span class="dot"></span>Хорошая база</span>
+        <div class="t"><div class="kicker">Ключевой блок · решено</div><h3>Отдельная страница, 0 подписок, без Plus</h3></div>
+        <span class="pill ok"><span class="dot"></span>Кастом, но дёшево</span>
       </div>
       <div class="acard-body">
-        <p>Цвета и типографика оформлены как переменные Figma. Единый шрифт <b>Jost</b>, выстроенная шкала заголовков. Есть выделенная секция Ui&nbsp;Kit с компонентами (поиск, карточки товара, кнопки, теги, формы, дропдауны, степперы количества, футер с картой) в desktop- и mobile-исполнении.</p>
-        <div class="sw">
-          <span class="swatch"><i style="background:#874c64"></i><code>#874c64</code>Purple</span>
-          <span class="swatch"><i style="background:#1e0a12"></i><code>#1e0a12</code>Black</span>
-          <span class="swatch"><i style="background:#f6f5eb"></i><code>#f6f5eb</code>Beige</span>
-          <span class="swatch"><i style="background:#eae7d3"></i><code>#eae7d3</code>Beige btn</span>
-          <span class="swatch"><i style="background:#ffe4e4"></i><code>#ffe4e4</code>Pink</span>
-          <span class="swatch"><i style="background:#f4bfc5"></i><code>#f4bfc5</code>Pink Dark</span>
+        <p>Конструктор — отдельная страница только для «конструируемых» тортов (голые торты + торты, у которых разрешён декор). Начинку в конструкторе не выбирают. Собирается на штатных возможностях темы.</p>
+
+        <h4>Как опции ложатся на Shopify</h4>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Опция</th><th>Тип на Shopify</th><th>Цена</th></tr></thead>
+            <tbody>
+              <tr><td>Вес</td><td>Вариант базового торта</td><td>у каждого веса своя цена</td></tr>
+              <tr><td>Основа (сам торт)</td><td>Базовый товар</td><td>у каждого своя</td></tr>
+              <tr><td>Ягодный венок</td><td>Товар-доп</td><td>у разных венков разная</td></tr>
+              <tr><td>Печатная надпись (шрифт)</td><td>Товар-доп + property на текст</td><td>фикс, одинаковая</td></tr>
+              <tr><td>Текст надписи</td><td>line item property</td><td>бесплатно</td></tr>
+              <tr><td>Форма таблички</td><td>line item property</td><td>уточнить (скорее бесплатно)</td></tr>
+              <tr><td>Лента</td><td>Товар-доп</td><td>фикс, одинаковая</td></tr>
+              <tr><td>Упаковка</td><td>Товар-доп</td><td>+50 THB</td></tr>
+              <tr><td>Свечи (пачка)</td><td>Товар-доп</td><td>у каждого своя</td></tr>
+              <tr><td>Цифра-свеча</td><td>Товар-доп + property на значение (инпут)</td><td>по товару</td></tr>
+              <tr><td>Топпер</td><td>Товар-доп</td><td>фикс, цены указаны</td></tr>
+            </tbody>
+          </table>
         </div>
-        <hr>
+
+        <h4>Механика</h4>
+        <ul class="tight">
+          <li>Базовый торт — товар, <b>вес = варианты</b> (у каждого своя цена).</li>
+          <li>Всё платное (венок, печатная надпись, лента, упаковка, свечи, топпер) — <b>отдельные товары-допы</b> (скрытая коллекция, только для конструктора).</li>
+          <li>Всё бесплатное (текст, форма таблички, значение цифры) — <b>line item properties</b>, уезжают в заказ, менеджер их видит.</li>
+          <li>Живая цена на странице = сумма выбранного (считает JS).</li>
+          <li>В корзину всё летит <b>одним запросом</b> Cart AJAX API. Общий признак <code class="inline">_Сборка</code> связывает позиции — в кастомном drawer'е группируем их визуально под тортом.</li>
+        </ul>
+
+        <pre class="code"><span class="c">// добавление собранного торта одним запросом — без приложений и Functions</span>
+fetch(<span class="k">'/cart/add.js'</span>, {
+  method: <span class="k">'POST'</span>,
+  headers: { <span class="k">'Content-Type'</span>: <span class="k">'application/json'</span> },
+  body: JSON.stringify({ items: [
+    { id: cakeVariantId, quantity: 1, properties: { <span class="k">'Надпись'</span>: <span class="k">'С днём рождения'</span>, <span class="k">'_Сборка'</span>: <span class="k">'A17'</span> } },
+    { id: wreathVariantId, quantity: 1, properties: { <span class="k">'_Сборка'</span>: <span class="k">'A17'</span> } },
+    { id: packVariantId,   quantity: 1, properties: { <span class="k">'_Сборка'</span>: <span class="k">'A17'</span> } },
+    { id: candleVariantId, quantity: 1, properties: { <span class="k">'Цифра'</span>: <span class="k">'5'</span>, <span class="k">'_Сборка'</span>: <span class="k">'A17'</span> } },
+    { id: topperVariantId, quantity: 1, properties: { <span class="k">'_Сборка'</span>: <span class="k">'A17'</span> } }
+  ]})
+})</pre>
+
+        <h4>Почему НЕ нужны Functions и Plus</h4>
+        <p>Cart AJAX API и line item properties — это ядро Shopify на любом плане. Functions для этой схемы не нужны вообще. И сам миф «Functions = только Plus» неверен:</p>
+        <div class="tablewrap">
+          <table>
+            <thead><tr><th>Тип Shopify Function</th><th>План</th><th>Нужен нам?</th></tr></thead>
+            <tbody>
+              <tr><td>Discounts (скидки)</td><td class="yes">Все планы</td><td class="no">нет</td></tr>
+              <tr><td>Cart Transform (бандлы, слить в 1 строку)</td><td class="yes">Все планы</td><td class="no">нет</td></tr>
+              <tr><td>Cart / Checkout Validation</td><td class="yes">Все планы</td><td class="no">опц.</td></tr>
+              <tr><td>Payment customization</td><td class="plus">Только Plus</td><td class="no">нет</td></tr>
+              <tr><td>Delivery customization</td><td class="plus">Только Plus</td><td class="no">нет</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout okbox">Даже «одна строка с суммарной ценой» (если захочется позже) — это Cart Transform, а он работает на обычном плане (на нём же построено бесплатное 1st-party приложение Shopify&nbsp;Bundles). Plus упирается <b>только</b> в кастомизацию самого чекаута, которая проекту не нужна.</div>
+
+        <h4>Стоимость: разово vs подписка</h4>
         <div class="rows">
-          <div class="row"><div class="k">Типографика</div><div class="v">Jost — H1 44 / H2 38 / H3 34 / H4 18 / Body 16 / Button 16–14 / Label 14. Заданы line-height и letter-spacing.</div></div>
-          <div class="row"><div class="k">Проверить</div><div class="v"><b>Единая сетка и брейкпоинты</b> (в токенах их не видно), spacing-шкала, радиусы и тени как токены, <b>состояния компонентов</b> (hover / focus / active / disabled / error), покрытие всех экранов компонентами (там где «частично» — свести к общим).</div></div>
-          <div class="row"><div class="k">Рекомендация</div><div class="v">До верстки финализировать токены (spacing / radius / shadow), собрать брейкпоинты и состояния. Тёмная тема не нужна — сайт светлый по концепции.</div></div>
+          <div class="row"><div class="k">Подписка-конфигуратор</div><div class="v">~$2300/мес — миф; реальные апп-конфигураторы дешевле, но это <b>платёж навсегда</b> + чужой UI, дизайн подгоняется под них.</div></div>
+          <div class="row"><div class="k">Наш путь</div><div class="v"><b>Разовая разработка</b>, дизайн 1-в-1 по макету, дальше 0 ₽/мес. По твоему решению — предпочтителен.</div></div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SECTIONS -->
+  <!-- AVAILABILITY / LEAD TIME / DELIVERY -->
+  <section id="availability">
+    <h2>Наличие, сроки и доставка — главный узел</h2>
+    <div class="acard" style="border-color: color-mix(in srgb, var(--crit) 40%, var(--line));">
+      <div class="acard-head">
+        <div class="t"><div class="kicker">Требует продумывания · бизнес-логика</div><h3>Смешанная корзина: наличие vs «под заказ»</h3></div>
+        <span class="pill crit"><span class="dot"></span>Главная сложность</span>
+      </div>
+      <div class="acard-body">
+        <p>Товары делятся на два типа, и это ядро всей логики заказа:</p>
+        <div class="rows">
+          <div class="row"><div class="k">В наличии</div><div class="v">Готовые торты / пирожные / десерты — можно привезти <b>день в день</b>.</div></div>
+          <div class="row"><div class="k">Под заказ</div><div class="v">Торты с декором / из конструктора — <b>срок изготовления минимум 1–2 дня</b>, день в день нельзя.</div></div>
+        </div>
+
+        <h4>Согласованное правило</h4>
+        <ul class="tight">
+          <li><b>Не отказываем клиенту</b> — заказ можно оформить всегда, просто корректно сообщаем срок.</li>
+          <li><b>Дата доставки — по самому долгому товару в корзине.</b> Весь заказ едет одной доставкой (её нельзя дробить), когда готово всё.</li>
+          <li><b>В конструкторе</b> сразу плашка: «Торт с декором готовится минимум 1–2 дня, доставка день-в-день недоступна».</li>
+          <li><b>В корзине</b> — нотификация «В заказе есть товары под заказ, ближайшая доставка — [дата]» <b>только если</b> такой товар в корзине есть. Если нет — нотификации нет, доступна день-в-день.</li>
+        </ul>
+
+        <h4>Как на Shopify (без приложений)</h4>
+        <div class="rows">
+          <div class="row"><div class="k">Тип и срок</div><div class="v">Метафилд у товара: <code class="inline">под заказ = да/нет</code> и <code class="inline">срок, дней</code>. Ставится вручную у тортов с декором.</div></div>
+          <div class="row"><div class="k">Наличие</div><div class="v">Штатный inventory Shopify. «Нет на складе, но можно под заказ» → разрешить продажу при нуле остатка + метка срока.</div></div>
+          <div class="row"><div class="k">Плашки/нотификация</div><div class="v">Логика в теме (Liquid + JS): читаем метафилды позиций, показываем предупреждение и вычисляем ближайшую дату. Всё на обычном плане.</div></div>
+        </div>
+
+        <h4>Где выбирать дату доставки — важный нюанс</h4>
+        <div class="callout warnbox">
+          <p style="margin:0 0 8px;"><b>Дата на самой странице чекаута требует приложения или Plus.</b> Чтобы остаться на 0 подписок, есть два бесплатных пути:</p>
+          <ul class="tight" style="margin:0;">
+            <li><b>Дату/слот выбираем в корзине</b> (штатные cart attributes) → значение уезжает в заказ. Бесплатно, и туда же ложится нотификация про сроки.</li>
+            <li><b>Либо дату финально подтверждает менеджер на звонке</b> (он и так звонит уточнить адрес и прислать QR) — тогда на сайте показываем только ближайшую доступную дату, поле не обязательно.</li>
+          </ul>
+          <p style="margin:8px 0 0;">Слоты времени — «от доступности Lalamove», поэтому жёсткий график можно не зашивать: диапазоны подтверждает менеджер.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECTIONS BREAKDOWN -->
   <section id="sections">
     <h2>Разбор по разделам</h2>
     <div class="cards">
@@ -331,13 +446,13 @@
       <div class="acard">
         <div class="acard-head">
           <div class="t"><div class="kicker">Раздел 01</div><h3>Главная</h3></div>
-          <span class="pill ok"><span class="dot"></span>Ложится на тему</span>
+          <span class="pill ok"><span class="dot"></span>Core / нативно</span>
         </div>
         <div class="acard-body">
-          <p>≈10 секций: hero с CTA, «Популярные торты», промо-баннеры, «Коллекция начинок», вход в конструктор «Создай свой торт», «Десерты», отзывы клиентов, скидка 10%, футер с картой.</p>
+          <p>≈10 секций: hero, «Популярные торты», промо-баннеры, «Коллекция начинок», вход в конструктор, «Десерты», отзывы, скидка 10%, футер с картой.</p>
           <div class="rows">
-            <div class="row"><div class="k">На Shopify</div><div class="v">Каждая секция — настраиваемая Liquid-секция в редакторе темы. Стандартно.</div></div>
-            <div class="row"><div class="k">Риски</div><div class="v">Тяжёлые изображения (нужна оптимизация / lazy-load), карусель отзывов, привязка блоков «Популярное» к коллекциям.</div></div>
+            <div class="row"><div class="k">На Shopify</div><div class="v">Настраиваемые Liquid-секции. Отзывы — <b>статичные</b> (кадры из Instagram-видео), значит просто галерея, без сбора отзывов на сайте.</div></div>
+            <div class="row"><div class="k">Промо 10%</div><div class="v">Автоскидка после регистрации → автоматическая скидка на первый заказ для новых аккаунтов.</div></div>
           </div>
         </div>
       </div>
@@ -345,62 +460,30 @@
       <!-- Каталог -->
       <div class="acard">
         <div class="acard-head">
-          <div class="t"><div class="kicker">Раздел 02</div><h3>Каталог + Каталог кусков</h3></div>
-          <span class="pill ok"><span class="dot"></span>Ложится на тему</span>
+          <div class="t"><div class="kicker">Раздел 02</div><h3>Каталог</h3></div>
+          <span class="pill ok"><span class="dot"></span>Core / нативно</span>
         </div>
         <div class="acard-body">
-          <p>Сетка карточек 4-в-ряд, чипсы-фильтры (Все торты, Пирожные, Муссовые, Мини-торты, Десерты, Торты с декором, Начинки). Отдельный вид «Куски тортов».</p>
+          <p>Сетка карточек + чипсы-фильтры. Категории: Все торты, Пирожные, Муссовые, Мини-торты, Десерты, Торты с декором, Начинки, <b>+ «голые торты»</b> (их можно кастомить в конструкторе).</p>
           <div class="rows">
-            <div class="row"><div class="k">На Shopify</div><div class="v">Нативные коллекции + storefront-фильтрация (теги / метафилды). «Куски» — отдельная коллекция или тип товара.</div></div>
-            <div class="row"><div class="k">Риски</div><div class="v">Логика фильтров (пересечение категорий), быстрое «+ в корзину» с карточки для товаров с обязательным выбором веса.</div></div>
+            <div class="row"><div class="k">На Shopify</div><div class="v">Коллекции + storefront-фильтры. «Голые торты» — коллекция + метка «можно кастомить».</div></div>
+            <div class="row"><div class="k">Быстрый заказ</div><div class="v">Из каталога — <b>попап с выбором веса</b> и добавлением в корзину.</div></div>
           </div>
         </div>
       </div>
 
-      <!-- Карточка товара -->
+      <!-- Карточка -->
       <div class="acard">
         <div class="acard-head">
-          <div class="t"><div class="kicker">Раздел 03</div><h3>Карточка товара (Cake card)</h3></div>
-          <span class="pill warn"><span class="dot"></span>Нужно решение</span>
+          <div class="t"><div class="kicker">Раздел 03</div><h3>Карточка товара</h3></div>
+          <span class="pill warn"><span class="dot"></span>Настройка</span>
         </div>
         <div class="acard-body">
-          <p>Галерея, аллерген-теги, селектор веса (0.5 / 1 / 1.5 кг с числом персон), кнопка «В корзину» с ценой, «Добавить декор +» (переход в конструктор), состав, аккордеон «Хранение и срок годности», блок кросс-селла «Добавить к заказу».</p>
+          <p>Галерея, аллергены, состав (у всех), число персон (у тортов), выбор веса (у каждого своя цена; у пирожных веса нет), «В корзину», аккордеон хранения.</p>
           <div class="rows">
-            <div class="row"><div class="k">На Shopify</div><div class="v"><b>Вес</b> → варианты товара. <b>Состав / аллергены / персоны / срок</b> → метафилды. <b>«Добавить к заказу»</b> (упаковка, начинка, свечи, табличка с ценами) → приложение доп.опций или кастом-логика добавления отдельных line items.</div></div>
-            <div class="row"><div class="k">Риски</div><div class="v">Кросс-селл-add-on'ы добавляют цену — нативные варианты это не решают. Бейдж «В корзине» и связка с конструктором.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Конструктор -->
-      <div class="acard" style="border-color: color-mix(in srgb, var(--crit) 40%, var(--line));">
-        <div class="acard-head">
-          <div class="t"><div class="kicker">Раздел 04 · ключевой риск</div><h3>Конструктор торта (Cake builder)</h3></div>
-          <span class="pill crit"><span class="dot"></span>Кастом-разработка</span>
-        </div>
-        <div class="acard-body">
-          <p>Интерактивный конфигуратор с живой ценой. Набор опций выходит далеко за пределы нативной модели вариантов Shopify (макс. 3 опции):</p>
-          <div class="tags" style="margin:2px 0 12px;">
-            <span class="tag">вес (вариант)</span>
-            <span class="tag">ягодный декор</span>
-            <span class="tag">надпись + шрифт + цвет</span>
-            <span class="tag">табличка с текстом</span>
-            <span class="tag">цветы / декор</span>
-            <span class="tag">упаковка +цена</span>
-            <span class="tag">свечи +цена, кол-во</span>
-            <span class="tag">топпер +цена</span>
-            <span class="tag">живой пересчёт цены</span>
-          </div>
-          <div class="rows">
-            <div class="row"><div class="k">Варианты решения</div><div class="v">
-              <ul class="tight" style="margin-top:0;">
-                <li><b>Приложение доп.опций</b> с ценовыми add-on (Globo / Infinite Options и add-on-товары) — быстрее, но абонплата и ограничения UI.</li>
-                <li><b>Кастомный билдер</b> на Storefront API + <b>Shopify Functions</b> для расчёта цены — максимум контроля под этот дизайн, дороже в разработке.</li>
-                <li><b>Bundle-приложение</b> — если сборка ближе к «набору», а не к калькулятору.</li>
-              </ul>
-            </div></div>
-            <div class="row"><div class="k">Персонализация</div><div class="v">Текст на торте / табличке → line item properties (переносятся в заказ и видны в корзине).</div></div>
-            <div class="row"><div class="k">Главный вывод</div><div class="v"><b>Это основной драйвер бюджета и сроков.</b> Решение по механизму принять до верстки карточки и корзины — они от него зависят.</div></div>
+            <div class="row"><div class="k">Метафилды</div><div class="v">Аллергены, состав — у всех; персоны, размер — у тортов; срок изготовления — у тортов с декором.</div></div>
+            <div class="row"><div class="k">«Добавить к заказу»</div><div class="v"><b>Отдельная коллекция допов для апселла</b> (не те же, что в конструкторе) — добавляются отдельными позициями.</div></div>
+            <div class="row"><div class="k">«Добавить декор +»</div><div class="v">Ведёт в конструктор, <b>кнопка только у тортов, которые можно кастомить</b>.</div></div>
           </div>
         </div>
       </div>
@@ -408,60 +491,60 @@
       <!-- Начинки -->
       <div class="acard">
         <div class="acard-head">
-          <div class="t"><div class="kicker">Раздел 05</div><h3>Начинки (Fillings)</h3></div>
-          <span class="pill warn"><span class="dot"></span>Нужно решение</span>
+          <div class="t"><div class="kicker">Раздел 04</div><h3>Начинки</h3></div>
+          <span class="pill ok"><span class="dot"></span>Core / контент</span>
         </div>
         <div class="acard-body">
-          <p>Контент-каталог из ~15+ карточек: фото среза, название, описание, состав, аллергены. Начинки при этом ещё и выбираются в конструкторе и кросс-селле — значит это общая переиспользуемая сущность.</p>
+          <p>Контент-каталог (~15+): фото среза, название, описание, состав, аллергены. В конструкторе <b>не</b> выбираются — значит это чисто информационная страница, связки с конструктором не требуется.</p>
           <div class="rows">
-            <div class="row"><div class="k">На Shopify</div><div class="v"><b>Метаобъекты (metaobjects)</b> с полями фото / описание / состав / аллергены; на них ссылаются страница «Начинки», конструктор и карточка. Единый источник данных.</div></div>
-            <div class="row"><div class="k">Риски</div><div class="v">Если начинки завести просто страницей — их придётся дублировать в конструкторе. Метаобъекты решают, но требуют настройки на старте.</div></div>
+            <div class="row"><div class="k">На Shopify</div><div class="v">Метаобъекты или страница-каталог. Проще, чем считалось изначально.</div></div>
           </div>
         </div>
       </div>
 
       <!-- Корзина -->
-      <div class="acard" style="border-color: color-mix(in srgb, var(--crit) 40%, var(--line));">
-        <div class="acard-head">
-          <div class="t"><div class="kicker">Раздел 06 · ключевой риск</div><h3>Корзина (Cart drawer)</h3></div>
-          <span class="pill crit"><span class="dot"></span>Кастом-разработка</span>
-        </div>
-        <div class="acard-body">
-          <p>Выезжающий drawer. Строки с персонализацией («Текст: С днём рождения, Вика!»), бандлы («Сет пирожных» с выбранным составом), бейдж срока изготовления «От 2х дней», <b>выбор даты и времени доставки/самовывоза прямо в корзине</b> с валидацией, кнопка «Перейти к оформлению».</p>
-          <div class="rows">
-            <div class="row"><div class="k">На Shopify</div><div class="v">Дата/время в корзине → cart attributes + кастомный JS, либо приложение (Zapiet — Pickup&nbsp;+&nbsp;Delivery). <b>Валидация lead-time</b> («товар не позволяет доставку на сегодня») → метафилд срока у товара + логика в корзине. Бандлы → bundle-приложение или составные товары.</div></div>
-            <div class="row"><div class="k">Риски</div><div class="v">Дата доставки должна дойти до заказа и до Lalamove. Валидация «минимальный срок по самому долгому товару в корзине» — кастомная бизнес-логика, тестировать отдельно.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Доставка и оплата -->
-      <div class="acard" style="border-color: color-mix(in srgb, var(--crit) 40%, var(--line));">
-        <div class="acard-head">
-          <div class="t"><div class="kicker">Раздел 07 · ключевой риск</div><h3>Доставка и оплата</h3></div>
-          <span class="pill crit"><span class="dot"></span>Кастом-разработка / конфигурация</span>
-        </div>
-        <div class="acard-body">
-          <p>Самовывоз из кондитерской + <b>доставка курьером Lalamove</b> (ввод адреса, дата/время, расчёт стоимости, оплата). Оплата: «Картой на сайте», тайский QR (PromptPay), «Оплата через менеджера» — перевод в рублях. Инструкция по QR-оплате (аккордеон).</p>
-          <div class="rows">
-            <div class="row"><div class="k">Платежи</div><div class="v"><b>Shopify Payments в Таиланде недоступен.</b> Карты/THB → сторонний шлюз (2C2P / Opn&nbsp;(Omise) / GB&nbsp;Prime&nbsp;Pay), PromptPay — через них. «Через менеджера в рублях» → ручной (offline) способ оплаты или draft-заказ. Нужны реквизиты и договоры со шлюзом.</div></div>
-            <div class="row"><div class="k">Доставка</div><div class="v"><b>Lalamove</b> → приложение из App Store или интеграция через carrier service API с live-расчётом. Самовывоз → local pickup. Дата/время должны прокидываться из корзины.</div></div>
-            <div class="row"><div class="k">Риски</div><div class="v">Мультивалютность THB/RUB (Shopify Markets показывает валюты, но расчёт в RUB через Shopify Payments в TH невозможен — отсюда «менеджер»). Комиссии шлюзов, KYC, сроки подключения — организационный, а не только технический риск.</div></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Личный кабинет -->
       <div class="acard">
         <div class="acard-head">
-          <div class="t"><div class="kicker">Раздел 08</div><h3>Личный кабинет (Account)</h3></div>
-          <span class="pill warn"><span class="dot"></span>Нужно решение</span>
+          <div class="t"><div class="kicker">Раздел 05</div><h3>Корзина</h3></div>
+          <span class="pill warn"><span class="dot"></span>Настройка</span>
         </div>
         <div class="acard-body">
-          <p>Профиль (имя, email, телефон, адрес доставки — редактировать / новый адрес / удалить), история заказов со статусами («Собираем заказ», «Доставлен») и превью товаров.</p>
+          <p>Drawer со строками, персонализацией (properties), собранными в конструкторе тортами и клиентскими «сетами» (клиент сам набирает состав, фиксированных нет).</p>
           <div class="rows">
-            <div class="row"><div class="k">На Shopify</div><div class="v">Customer accounts. Несколько адресов — нативно. <b>Кастомные статусы заказа</b> («Собираем заказ») → order tags / метафилды + отображение. New customer accounts кастомизируются ограниченно (UI extensions); полный контроль дизайна — только classic (постепенно устаревают).</div></div>
-            <div class="row"><div class="k">Риски</div><div class="v">Точное повторение дизайна кабинета может упереться в ограничения платформы — согласовать допустимые упрощения заранее.</div></div>
+            <div class="row"><div class="k">Сроки</div><div class="v">Нотификация о сроке — только если в корзине есть товар «под заказ» (см. раздел «Наличие, сроки и доставка»).</div></div>
+            <div class="row"><div class="k">Дата доставки</div><div class="v">Рекомендуется <b>в корзине</b> (бесплатно) либо подтверждает менеджер. На самом чекауте — потребовало бы app/Plus.</div></div>
+            <div class="row"><div class="k">Мин. сумма</div><div class="v">Минимальная сумма заказа будет (значение ещё не определено) — задаётся штатно.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Оплата -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 06</div><h3>Оплата</h3></div>
+          <span class="pill warn"><span class="dot"></span>Настройка + организация</span>
+        </div>
+        <div class="acard-body">
+          <p>Онлайн-карта на старте нужна. Иностранные карты (туристы) + тайские. Плюс оплата через менеджера по QR.</p>
+          <div class="rows">
+            <div class="row"><div class="k">Онлайн-карты</div><div class="v"><b>Opn (Omise) / 2C2P</b> — тайский шлюз, принимает иностранные и тайские карты + PromptPay. Любой план. <b>Stripe напрямую в Shopify для TH не подключить.</b></div></div>
+            <div class="row"><div class="k">Через менеджера</div><div class="v"><b>Ручной (offline) способ оплаты.</b> Заказ → менеджеру падает → он звонит, уточняет адрес, шлёт QR (PromptPay / 24exchange TG-бот). Рубли по итогу не принимаются, онлайн-приём рублей не нужен.</div></div>
+            <div class="row"><div class="k">Риск</div><div class="v">Подключение шлюза — <b>KYC и сроки</b> (тайское юрлицо, проверка). Организационный, начинать заранее.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Кабинет -->
+      <div class="acard">
+        <div class="acard-head">
+          <div class="t"><div class="kicker">Раздел 07</div><h3>Личный кабинет</h3></div>
+          <span class="pill warn"><span class="dot"></span>Настройка</span>
+        </div>
+        <div class="acard-body">
+          <p>Профиль, адреса, история заказов со статусами. Заказ можно оформить <b>как гость</b>, но подталкиваем к регистрации (попап/страница о плюсах) — задел под <b>реферальную систему</b>.</p>
+          <div class="rows">
+            <div class="row"><div class="k">Статусы</div><div class="v">Все базовые (принят, собираем, готов, в пути, доставлен, отменён). Что можно — автоматизируем, остальное менеджер вручную (order tags / метафилды).</div></div>
+            <div class="row"><div class="k">Скидка 10%</div><div class="v">Автоматически после регистрации.</div></div>
           </div>
         </div>
       </div>
@@ -469,14 +552,11 @@
       <!-- Контент -->
       <div class="acard">
         <div class="acard-head">
-          <div class="t"><div class="kicker">Раздел 09</div><h3>О нас · FAQ · Попапы</h3></div>
-          <span class="pill ok"><span class="dot"></span>Ложится на тему</span>
+          <div class="t"><div class="kicker">Раздел 08</div><h3>Доставка-страница · О нас · FAQ</h3></div>
+          <span class="pill ok"><span class="dot"></span>Core / контент</span>
         </div>
         <div class="acard-body">
-          <p>Контентные страницы: «О нас» (текст + фото команды), FAQ (аккордеон вопрос-ответ), набор попапов (Popup / Desktop).</p>
-          <div class="rows">
-            <div class="row"><div class="k">На Shopify</div><div class="v">Страницы + секции / метаобъекты для FAQ. Попапы — компонент темы. Стандартно.</div></div>
-          </div>
+          <p>Самовывоз: 76/47 Moo12, Nongprue Banglamung, Chonburi 20150. Доставка — Lalamove, пока только по Паттайе; стоимость считает Lalamove/менеджер (живой расчёт на сайте не нужен). FAQ готов (~12 вопросов). Контент даёт заказчик + дизайнер.</p>
         </div>
       </div>
 
@@ -488,64 +568,16 @@
     <h2>Риск-регистр</h2>
     <div class="tablewrap">
       <table>
-        <thead>
-          <tr><th>Риск</th><th>Раздел</th><th>Влияние</th><th>Митигация</th></tr>
-        </thead>
+        <thead><tr><th>Риск</th><th>Влияние</th><th>Митигация</th></tr></thead>
         <tbody>
-          <tr>
-            <td>Конструктор выходит за рамки нативных вариантов и наценок</td>
-            <td>Конструктор</td>
-            <td><span class="sev h">Высокое</span></td>
-            <td>Выбрать механизм (app доп.опций vs кастом + Functions) до верстки; прототип цены на 1 товаре</td>
-          </tr>
-          <tr>
-            <td>Платёжные шлюзы Таиланда: подключение, KYC, комиссии, RUB через менеджера</td>
-            <td>Оплата</td>
-            <td><span class="sev h">Высокое</span></td>
-            <td>Начать подключение 2C2P / Opn заранее (организационные сроки); RUB — offline-способ</td>
-          </tr>
-          <tr>
-            <td>Дата/время доставки в корзине + валидация срока изготовления</td>
-            <td>Корзина</td>
-            <td><span class="sev h">Высокое</span></td>
-            <td>Zapiet или кастом на cart attributes; метафилд lead-time у товара; отдельный QA</td>
-          </tr>
-          <tr>
-            <td>Интеграция Lalamove с live-расчётом и прокидыванием даты</td>
-            <td>Доставка</td>
-            <td><span class="sev m">Среднее</span></td>
-            <td>Проверить наличие/качество приложения Lalamove; запасной план — carrier service API</td>
-          </tr>
-          <tr>
-            <td>Начинки дублируются между страницей, конструктором и кросс-селлом</td>
-            <td>Начинки</td>
-            <td><span class="sev m">Среднее</span></td>
-            <td>Единый источник — metaobjects, спроектировать схему на старте</td>
-          </tr>
-          <tr>
-            <td>Кастомный дизайн кабинета vs ограничения customer accounts</td>
-            <td>Кабинет</td>
-            <td><span class="sev m">Среднее</span></td>
-            <td>Согласовать упрощения; статусы через order tags</td>
-          </tr>
-          <tr>
-            <td>Кросс-селл add-on'ы с ценой на карточке</td>
-            <td>Карточка</td>
-            <td><span class="sev m">Среднее</span></td>
-            <td>Тот же механизм, что и конструктор, чтобы не плодить решения</td>
-          </tr>
-          <tr>
-            <td>«Частичность» дизайн-системы: нет явной сетки/брейкпоинтов/состояний</td>
-            <td>Дизайн-система</td>
-            <td><span class="sev l">Низкое</span></td>
-            <td>Финализировать токены и состояния до верстки</td>
-          </tr>
-          <tr>
-            <td>Тяжёлые изображения тортов — скорость и Core Web Vitals</td>
-            <td>Главная / Каталог</td>
-            <td><span class="sev l">Низкое</span></td>
-            <td>Оптимизация, srcset, lazy-load, CDN Shopify</td>
-          </tr>
+          <tr><td>Логика «наличие / срок / смешанная доставка» — правила и крайние случаи</td><td><span class="sev h">Высокое</span></td><td>Правило зафиксировано (дата по самому долгому, не отказываем); метафилды + логика в теме; отдельный QA</td></tr>
+          <tr><td>Подключение платёжного шлюза (Opn/2C2P): KYC, тайское юрлицо, сроки</td><td><span class="sev h">Высокое</span></td><td>Начать оформление заранее — организационный, не кодовый риск</td></tr>
+          <tr><td>Сроки: 2–3 недели на полный кастом — мало</td><td><span class="sev h">Высокое</span></td><td>MVP за 2–3 нед, интеграции/полировка — дольше; не обещать заказчику полный объём в срок</td></tr>
+          <tr><td>Выбор даты доставки на чекауте потребовал бы app/Plus</td><td><span class="sev m">Среднее</span></td><td>Собирать дату в корзине (бесплатно) или подтверждать менеджером</td></tr>
+          <tr><td>Связка с Lalamove (диапазоны слотов, передача заказа)</td><td><span class="sev m">Среднее</span></td><td>Слоты — по доступности Lalamove, подтверждает менеджер; жёсткий график не зашивать</td></tr>
+          <tr><td>Конструктор торта</td><td><span class="sev l">Низкое</span></td><td>Решён: Cart AJAX + допы + properties, без Functions/Plus/подписок</td></tr>
+          <tr><td>Дизайн-система: нет явной сетки / брейкпоинтов / состояний</td><td><span class="sev l">Низкое</span></td><td>Финализировать токены и состояния до верстки</td></tr>
+          <tr><td>Тяжёлые изображения тортов — скорость</td><td><span class="sev l">Низкое</span></td><td>Оптимизация, srcset, lazy-load, CDN Shopify</td></tr>
         </tbody>
       </table>
     </div>
@@ -554,60 +586,54 @@
   <!-- EFFORT -->
   <section id="effort">
     <h2>Предварительная оценка объёма</h2>
-    <p style="color:var(--ink-soft); margin-top:-6px;">Ориентир в человеко-днях для кастомной темы. Диапазон зависит от выбранных механизмов (приложение vs собственная разработка) и объёма контента. Не заменяет ТЗ — это рамка для планирования.</p>
+    <p style="color:var(--ink-soft); margin-top:-6px;">Ориентир в человеко-днях. Разработка с AI (Claude/Codex) ускоряет верстку и JS, но интеграции (шлюз, Lalamove) и тесты логики сроков кодом не ускоряются. Не заменяет ТЗ — рамка для планирования.</p>
     <div class="tablewrap">
       <table>
-        <thead>
-          <tr><th>Блок работ</th><th>Часы</th><th>Комментарий</th></tr>
-        </thead>
+        <thead><tr><th>Блок работ</th><th>Чел-дни</th><th>Комментарий</th></tr></thead>
         <tbody>
-          <tr><td>Каркас темы, токены → код, дизайн-система</td><td class="num">3–5</td><td>Сетка, брейкпоинты, spacing/radius/shadow, шрифт Jost</td></tr>
-          <tr><td>Глобальные компоненты (header, footer, cart drawer база, попапы)</td><td class="num">4–6</td><td>Переиспользуемая основа</td></tr>
-          <tr><td>Главная (10 настраиваемых секций)</td><td class="num">5–8</td><td>Секции в редакторе темы</td></tr>
-          <tr><td>Каталог + фильтры + карточки товара в сетке</td><td class="num">3–5</td><td>Коллекции, storefront-фильтры</td></tr>
-          <tr><td>Карточка товара (галерея, вес-варианты, метафилды, кросс-селл)</td><td class="num">4–6</td><td>Зависит от механизма add-on</td></tr>
-          <tr><td>⚑ Конструктор торта</td><td class="num">12–20</td><td>Главный узел; app+кастом vs полностью кастом</td></tr>
-          <tr><td>Начинки (metaobjects + шаблон + связи)</td><td class="num">3–5</td><td>Схема данных</td></tr>
-          <tr><td>⚑ Корзина (drawer, дата/время, lead-time, бандлы)</td><td class="num">6–10</td><td>Кастом-логика + QA</td></tr>
-          <tr><td>⚑ Доставка + платежи (Lalamove, шлюзы, QR, manual RUB)</td><td class="num">6–10</td><td>+ организационные сроки подключений</td></tr>
-          <tr><td>Личный кабинет (customer accounts, статусы)</td><td class="num">3–6</td><td>В рамках возможностей платформы</td></tr>
-          <tr><td>Контент-страницы (О нас, FAQ, Доставка)</td><td class="num">2–4</td><td>Стандартно</td></tr>
-          <tr><td>QA, адаптив, оптимизация изображений, запуск</td><td class="num">5–8</td><td>Сквозное тестирование сценариев</td></tr>
+          <tr><td>Каркас темы, токены → код, дизайн-система</td><td class="num">2–4</td><td>Сетка, брейкпоинты, шрифт Jost</td></tr>
+          <tr><td>Глобальное (header, footer, cart drawer, попапы)</td><td class="num">3–5</td><td>Попап быстрого заказа с весом</td></tr>
+          <tr><td>Главная (≈10 секций)</td><td class="num">4–7</td><td>Секции + статичные отзывы</td></tr>
+          <tr><td>Каталог + фильтры + карточка + метафилды</td><td class="num">4–6</td><td>Апселл-коллекция допов</td></tr>
+          <tr><td>Конструктор торта</td><td class="num">6–10</td><td>Cart AJAX + допы + properties, без подписок</td></tr>
+          <tr><td>⚑ Логика наличие / срок / нотификации / дата</td><td class="num">4–7</td><td>Главный бизнес-узел + QA</td></tr>
+          <tr><td>Оплата (Opn/2C2P + ручной способ)</td><td class="num">2–4</td><td>+ организационные сроки KYC отдельно</td></tr>
+          <tr><td>Кабинет, статусы, гость + регистрация, скидка 10%</td><td class="num">3–5</td><td>Задел под рефералку</td></tr>
+          <tr><td>Контент-страницы (Доставка, О нас, FAQ), 2 языка (RU/EN)</td><td class="num">3–5</td><td>Translate &amp; Adapt (бесплатно)</td></tr>
+          <tr><td>QA, адаптив, оптимизация, запуск</td><td class="num">4–6</td><td>Сквозные сценарии</td></tr>
         </tbody>
-        <tfoot>
-          <tr><td>Итого (ориентир)</td><td class="num">≈ 56–93</td><td>+ ежемесячная абонплата приложений</td></tr>
-        </tfoot>
+        <tfoot><tr><td>Итого (ориентир)</td><td class="num">≈ 35–59</td><td>обычный план Shopify, 0 обязательных подписок</td></tr></tfoot>
       </table>
     </div>
-    <p style="color:var(--muted); font-size:13px; margin-top:10px;">⚑ — узлы, определяющие итоговый бюджет. Выбор «приложение vs кастом» по ним сдвигает оценку сильнее всего.</p>
+    <p style="color:var(--muted); font-size:13px; margin-top:10px;">⚑ — главный бизнес-узел. За 2–3 недели реалистичен MVP (каталог, карточка, корзина, конструктор, оплата); интеграции и полировка логики сроков, вероятно, выйдут за срок.</p>
   </section>
 
   <!-- PRE-DEV CHECKLIST -->
   <section id="checklist">
-    <h2>Что решить/поправить в макете до верстки</h2>
+    <h2>Что решить/сделать до старта</h2>
     <div class="check">
-      <div class="item"><div class="box"></div><div><b>Механизм конструктора и карточки.</b> <span>Приложение доп.опций или кастом + Shopify Functions. Единое решение для наценок в конструкторе и в «Добавить к заказу».</span></div></div>
-      <div class="item"><div class="box"></div><div><b>Механизм даты доставки и lead-time.</b> <span>Zapiet vs кастом. Определить правило минимального срока (по самому долгому товару?) и как дата попадает в заказ и в Lalamove.</span></div></div>
-      <div class="item"><div class="box"></div><div><b>Платёжные шлюзы.</b> <span>Начать подключение тайского шлюза (2C2P / Opn) и оформить offline-способ для RUB-переводов — это организационные сроки, стартовать заранее.</span></div></div>
-      <div class="item"><div class="box"></div><div><b>Модель данных начинок.</b> <span>Metaobjects со схемой полей; единый источник для страницы, конструктора и кросс-селла.</span></div></div>
-      <div class="item"><div class="box"></div><div><b>Токены и состояния.</b> <span>Добавить в макет spacing-шкалу, брейкпоинты, радиусы/тени и состояния компонентов (hover/focus/disabled/error).</span></div></div>
-      <div class="item"><div class="box"></div><div><b>Дизайн кабинета.</b> <span>Согласовать допустимые упрощения под ограничения Shopify customer accounts.</span></div></div>
-      <div class="item"><div class="box"></div><div><b>Мобильный конструктор.</b> <span>Проверить мобильную версию Cake builder на полноту (в файле есть, но нужно свериться, что покрыты все шаги).</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Оформить платёжный шлюз.</b> <span>Начать подключение Opn (Omise) или 2C2P — там KYC и сроки, это стартовать первым.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Финализировать правило сроков доставки.</b> <span>Подтверждено: дата по самому долгому товару, не отказываем, нотификация в корзине/конструкторе. Осталось решить, где собираем дату — в корзине или у менеджера.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Разметить товары метафилдами.</b> <span>«под заказ», «срок дней», «можно кастомить», аллергены, состав, персоны.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Собрать товары-допы для конструктора.</b> <span>Венок, печатная надпись, лента, упаковка, свечи, цифры, топпер — с ценами; скрытая коллекция.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Определить минимальную сумму заказа.</b> <span>Значение пока не задано.</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Токены и состояния в макете.</b> <span>Сетка, брейкпоинты, радиусы/тени, состояния компонентов (hover/focus/disabled/error).</span></div></div>
+      <div class="item"><div class="box"></div><div><b>Согласовать объём MVP под срок.</b> <span>Что входит в первые 2–3 недели, что — во вторую волну.</span></div></div>
     </div>
   </section>
 
   <!-- OPEN QUESTIONS -->
   <section id="questions">
-    <h2>Открытые вопросы к заказчику</h2>
-    <div class="q"><b>Ассортимент и варианты.</b> <span>Сколько SKU, у всех ли товаров выбор веса, какие товары «под заказ» и с каким сроком изготовления?</span></div>
-    <div class="q"><b>Оплата.</b> <span>Какой тайский шлюз уже используется/предпочтителен? Нужен ли онлайн-приём рублей или достаточно ручного перевода через менеджера?</span></div>
-    <div class="q"><b>Доставка.</b> <span>Lalamove — единственная служба? Зоны и тарифы самовывоза/доставки? Нужен ли живой расчёт стоимости на сайте?</span></div>
-    <div class="q"><b>Языки и валюты.</b> <span>Нужен ли полноценный второй язык (тайский/английский) и переключение валют, или интерфейс остаётся русским?</span></div>
-    <div class="q"><b>Приложения.</b> <span>Есть ли ограничение по бюджету на ежемесячные подписки приложений (влияет на выбор app vs кастом)?</span></div>
+    <h2>Остаточные открытые вопросы</h2>
+    <div class="q"><b>Дата доставки.</b> <span>Собираем в корзине (поле выбора) или показываем только ближайшую дату, а точную согласует менеджер на звонке?</span></div>
+    <div class="q"><b>Минимальная сумма заказа.</b> <span>Какое значение и одинаковое ли для самовывоза и доставки?</span></div>
+    <div class="q"><b>Форма таблички в конструкторе.</b> <span>Влияет на цену или бесплатная опция?</span></div>
+    <div class="q"><b>Аналитика и чат.</b> <span>Пиксели (Meta/TikTok/Google), WhatsApp-виджет — в апселл; определить, что ставим на старте.</span></div>
+    <div class="q"><b>Объём MVP.</b> <span>Финальный список того, что запускаем в первые 2–3 недели.</span></div>
   </section>
 
   <footer class="foot">
-    <p>Аудит подготовлен на основе Figma-файла «Cake Kamea (Copy)» — секции Site и Ui Kit, экраны desktop и mobile. Оценки предварительные и подлежат уточнению после согласования ТЗ и архитектурных решений по «красным» узлам.</p>
+    <p>Аудит обновлён по ответам заказчика (файл вопросов). Вывод: Shopify на обычном плане, без Shopify&nbsp;Plus и без обязательных платных подписок; конструктор — разовая кастом-разработка. Оценки предварительные, уточняются после ТЗ и согласования объёма MVP.</p>
   </footer>
 
 </div>
